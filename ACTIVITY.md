@@ -6,6 +6,10 @@ No work
 
 I have worked on A1's F8. Added a packaging, versioning and releasing workflow to both the app and model-service repositories, that parses the version from the app repo's pom.xml and releases the container images of both to the GitHub registry.
 
+- Rodrigo: https://github.com/doda25-team11/model-service/pull/5 & https://github.com/doda25-team11/model-service/pull/3
+
+I have worked on A1's F9 and F10. Add a workflow to train the ML model, and removed the hard coded model from the dockerfile.
+
 ### Week Q1.3 (Nov 24+)
 ### Week Q1.4 (Dec 1+)
 ### Week Q1.5 (Dec 8+)
