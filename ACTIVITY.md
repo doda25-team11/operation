@@ -12,7 +12,7 @@ I have worked on A1's F9 and F10. Add a workflow to train the ML model, and remo
 
 - Arnas: https://github.com/doda25-team11/lib-version
 
-I worked on versioning and deployment of the lib-version. I worked on F1, F2 and F11.
+I worked on versioning and deployment of the lib-version. All commits there are mine this week. I worked on F1, F2 and F11.
 
 ### Week Q1.3 (Nov 24+)
 ### Week Q1.4 (Dec 1+)
