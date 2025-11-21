@@ -10,7 +10,7 @@ services:
   app: 
     image: ${APP_IMAGE}
     ports:
-      - "${HOST_PORT}:${APP_PORT}"
+      - "${APP_PORT}:${APP_PORT}"
     depends_on: 
       - model-service   
     environment: 
