@@ -14,6 +14,13 @@ I have worked on A1's F9 and F10. Add a workflow to train the ML model, and remo
 
 I worked on versioning and deployment of the lib-version. All commits there are mine this week. I worked on F1, F2 and F11.
 
+- Figen: https://github.com/doda25-team11/operation
+
+I have worked on A1's F7, writing the docker-compose file to onfiguring services, environment variables, networking, volume mapping.
+
+- Amy:
+
+
 ### Week Q1.3 (Nov 24+)
 ### Week Q1.4 (Dec 1+)
 ### Week Q1.5 (Dec 8+)
