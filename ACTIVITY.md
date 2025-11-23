@@ -18,7 +18,9 @@ I worked on versioning and deployment of the lib-version. All commits there are 
 
 I have worked on A1's F7, writing the docker-compose file to onfiguring services, environment variables, networking, volume mapping.
 
-- Amy:
+- Amy: https://github.com/doda25-team11/model-service/pull/2 & https://github.com/doda25-team11/model-service/pull/6
+
+I worked on F4 and F6, making sure multiple architectures are supported and being able to set the ports (both frontend and backend) manually.
 
 
 ### Week Q1.3 (Nov 24+)
