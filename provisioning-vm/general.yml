@@ -67,6 +67,15 @@
         reload: true
       loop: "{{ k8s_sysctl_settings | dict2items }}"
 
+    # STEP 8: Manage /etc/hosts for cluster node name resolution
+    - name: Configure /etc/hosts for Kubernetes cluster
+      template:
+        src: templates/hosts.j2
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: '0644'
+
 
     - name: General setup placeholder (still here for now)
       debug:
