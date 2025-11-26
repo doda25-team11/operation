@@ -6,6 +6,12 @@
       - "ssh_keys/rodrigo.pub"
       # Add more keys, we need at least 2 (2 team members)
 
+    # STEP 7: sysctl parameters required by Kubernetes
+    k8s_sysctl_settings:
+      net.ipv4.ip_forward: 1
+      net.bridge.bridge-nf-call-iptables: 1
+      net.bridge.bridge-nf-call-ip6tables: 1
+
   tasks:
     # Step 4
     - name: Install team SSH keys for vagrant user
@@ -18,7 +24,7 @@
     # STEP 5a
     - name: Disable swap immediately
       shell: swapoff -a
-      when: ansible_swaptotal_mb | default(0) > 0
+      when: ansible_facts['swaptotal_mb'] | default(0) > 0
 
     # STEP 5b
     - name: Ensure swap is disabled on reboot (remove swap entries from fstab)
@@ -50,6 +56,16 @@
       modprobe:
         name: br_netfilter
         state: present
+
+    # Step 7
+    - name: Ensure Kubernetes-related sysctl settings are configured
+      sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value }}"
+        state: present
+        sysctl_set: true
+        reload: true
+      loop: "{{ k8s_sysctl_settings | dict2items }}"
 
 
     - name: General setup placeholder (still here for now)
