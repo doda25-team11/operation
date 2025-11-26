@@ -1,8 +1,19 @@
----
-- hosts: all 
-  become: yes
+- hosts: all
+  become: true
+
+  vars:
+    ssh_public_key_files: # file path relative to this playbook
+      - "ssh_keys/rodrigo.pub"
+      # Add more keys, we need at least 2 (2 team members)
+
   tasks:
-    # Placeholder for now
-    - name: Ensure general logic can begin
-      ansible.builtin.debug:
+    - name: Install team SSH keys for vagrant user
+      authorized_key:
+        user: vagrant
+        state: present
+        key: "{{ lookup('file', item) }}"
+      loop: "{{ ssh_public_key_files }}"
+
+    - name: General setup placeholder (still here for now)
+      debug:
         msg: "General setup placeholder executed successfully."
