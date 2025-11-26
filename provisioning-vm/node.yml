@@ -1,0 +1,8 @@
+---
+- hosts: all 
+  become: yes
+  tasks:
+    # Placeholder for now
+    - name: Ensure worker logic can begin
+      ansible.builtin.debug:
+        msg: "Worker setup placeholder executed successfully."
