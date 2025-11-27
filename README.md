@@ -58,6 +58,48 @@ These files define deployment and environment settings:
 * **`.env`**: Configures image tags, ports, and user IDs for volume permissions.
 * **`models/`**: The mounted host directory used as a local cache for model files.
 
+
+### Local Kubernetes VMs (Assignment 2)
+
+All provisioning lives in `provisioning-vm/` and is handled by Vagrant + Ansible.
+
+```bash
+cd provisioning-vm
+```
+
+Start the cluster (default provider, usually VirtualBox):
+```bash
+vagrant up
+```
+Start the cluster with a different provider (e.g. VMware):
+```bash
+vagrant up --provider=vmware_desktop
+```
+
+Re-run pro visioning after changing Ansible playbooks:
+```bash
+vagrant provision
+```
+
+Check VM status:
+```bash
+vagrant status
+```
+
+SSH into the controller, there are two ways. If your SSH keys work you can do this:
+```bash
+ssh vagrant@192.168.56.100
+```
+otherwise you can ssh into a VM doing:
+```bash
+vagrant ssh ctrl
+```
+
+Destroy all VMs:
+```bash
+vagrant destroy -f
+```
+
 ***
 
 ### App 
