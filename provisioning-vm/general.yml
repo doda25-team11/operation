@@ -2,7 +2,32 @@
 - hosts: all 
   become: yes
   tasks:
-    # Placeholder for now
-    - name: Ensure general logic can begin
-      ansible.builtin.debug:
-        msg: "General setup placeholder executed successfully."
+    - name: Add GPG signing key for Kubernetes apt repository
+      ansible.builtin.apt_key:
+        url: https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key
+        msg: "Successfully added Kubernetes GPG key"
+    - name: Add Kubernetes apt repository
+      ansible.builtin.apt_repository:
+        repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /
+        msg: "Successfully added Kubernetes apt repository"
+    - name: Add containerd
+      ansible.builtin.apt:
+        name: containerd=1.7.24
+        msg: "Successfully installed containerd"
+    - name: Add runc
+      ansible.builtin.apt:
+        name: runc=1.1.12
+        msg: "Successfully installed runc"
+    - name: Add kubeadm
+      ansible.builtin.apt:
+        name: kubeadm=1.32.4
+        msg: "Successfully installed kubeadm"
+    - name: Add kubelet
+      ansible.builtin.apt:
+        name: kubelet=1.32.4
+        msg: "Successfully installed kubelet"
+    - name: Add kubectl
+      ansible.builtin.apt:
+        name: kubectl=1.32.4
+        msg: "Successfully installed kubectl"
+    
