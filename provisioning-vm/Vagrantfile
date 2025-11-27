@@ -1,0 +1,75 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  
+  # cofiguration variables 
+  WORKER_COUNT = 2      # number of worker nodes to provision
+  BASE_IP = "192.168.56." # base IP 
+
+  # node resources based on step 1 specifications
+  CTRL_MEM = 4096 # 4+ GB memory for control Node
+  CTRL_CPUS = 1   # 1 core for control Node
+  NODE_MEM = 6144 # 6+ GB memory for worker Node 
+  NODE_CPUS = 2   # 2 cores for worker Node
+
+  config.vm.box = "bento/ubuntu-24.04"
+
+  # general setup for ALL VMs
+  # executes 'general.yml' on all nodes before node-specific provisioning
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "general.yml"
+    
+    # Pass variables from Vagrant to Ansible 
+    ansible.extra_vars = {
+      worker_count: WORKER_COUNT
+    }
+  end
+
+  # CONTROL NODE (ctrl) --
+
+  # defining the control node
+  config.vm.define "ctrl" do |ctrl|
+    ctrl.vm.hostname = "ctrl" # Hostname 'ctrl'
+
+    # adds the second NIC for host-only communication. (step 2)
+    ctrl.vm.network "private_network", ip: "#{BASE_IP}100" 
+    
+    # VM resources 
+    ctrl.vm.provider "virtualbox" do |vb|
+      vb.memory = CTRL_MEM
+      vb.cpus = CTRL_CPUS
+    end
+
+    # Ansible provisioning
+    ctrl.vm.provision "ansible" do |ansible|
+      ansible.playbook = "ctrl.yml" 
+    end
+  end
+
+  # WORKER NODES (node-N) --
+  # loop to create WORKER_COUNT amount of worker nodes
+  (1..WORKER_COUNT).each do |i|
+    node_name = "node-#{i}" # Hostname node-<N> (step 1)
+    node_ip = "#{BASE_IP}#{100 + i}" 
+
+    config.vm.define node_name do |node|
+      node.vm.hostname = node_name
+
+      # adds the second NIC for host-only communication. (step 2)
+      node.vm.network "private_network", ip: node_ip
+
+      # VM resources
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = NODE_MEM
+        vb.cpus = NODE_CPUS
+      end
+
+      # Ansible provisioning
+      node.vm.provision "ansible" do |ansible|
+        ansible.playbook = "node.yml" # executes worker setup logic
+      end
+    end
+  end
+
+end

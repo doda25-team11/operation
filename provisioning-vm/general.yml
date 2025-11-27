@@ -1,0 +1,8 @@
+---
+- hosts: all 
+  become: yes
+  tasks:
+    # Placeholder for now
+    - name: Ensure general logic can begin
+      ansible.builtin.debug:
+        msg: "General setup placeholder executed successfully."
