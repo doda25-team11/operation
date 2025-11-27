@@ -86,9 +86,13 @@ Check VM status:
 vagrant status
 ```
 
-SSH into the controller:
+SSH into the controller, there are two ways. If your SSH keys work you can do this:
 ```bash
 ssh vagrant@192.168.56.100
+```
+otherwise you can ssh into a VM doing:
+```bash
+vagrant ssh ctrl
 ```
 
 Destroy all VMs:
