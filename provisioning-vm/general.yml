@@ -30,4 +30,10 @@
       ansible.builtin.apt:
         name: kubectl=1.32.4
         msg: "Successfully installed kubectl"
+    - name: Start kubelet service on boot
+      ansible.builtin.service:
+        name: kubelet
+        enabled: true
+        state: started
+        msg: "Successfully started and enabled kubelet service"
     
