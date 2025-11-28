@@ -5,24 +5,41 @@
     - name: Add GPG signing key for Kubernetes apt repository
       ansible.builtin.apt_key:
         url: https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key
+        keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
     - name: Add Kubernetes apt repository
       ansible.builtin.apt_repository:
         repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
     - name: Add containerd
       ansible.builtin.apt:
-        name: containerd=1.7.24
+        name: containerd=1.7.24-*
+        allow_downgrade: yes
+
     - name: Add runc
       ansible.builtin.apt:
-        name: runc=1.1.12
+        name: runc=1.1.12-*
+        allow_downgrade: yes
+
     - name: Add kubeadm
       ansible.builtin.apt:
-        name: kubeadm=1.32.4
+        name: kubeadm=1.32.4-*
+        allow_downgrade: yes
+
     - name: Add kubelet
       ansible.builtin.apt:
-        name: kubelet=1.32.4
+        name: kubelet=1.32.4-*
+        allow_downgrade: yes
+
     - name: Add kubectl
       ansible.builtin.apt:
-        name: kubectl=1.32.4
+        name: kubectl=1.32.4-*
+        allow_downgrade: yes
+
     - name: Start kubelet service on boot
       ansible.builtin.service:
         name: kubelet
