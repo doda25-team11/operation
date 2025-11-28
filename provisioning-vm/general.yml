@@ -11,7 +11,8 @@
       net.ipv4.ip_forward: 1
       net.bridge.bridge-nf-call-iptables: 1
       net.bridge.bridge-nf-call-ip6tables: 1
-    
+        
+  tasks:
     # Step 4
     - name: Install team SSH keys for vagrant user
       authorized_key:
@@ -75,7 +76,6 @@
         group: root
         mode: '0644'
         
-  tasks:
     # STEP 9: Add kubernetes repository:
     - name: Add GPG signing key for Kubernetes apt repository
       ansible.builtin.apt_key:
