@@ -116,6 +116,48 @@
         name: kubectl=1.32.4-*
         allow_downgrade: yes
 
+    # STEP 11: Configure containerd
+    - name: Create containerd config directory
+      ansible.builtin.file:
+        path: /etc/containerd
+        state: directory
+        mode: '0755'
+
+    - name: Generate default containerd configuration
+      ansible.builtin.shell: containerd config default > /etc/containerd/config.toml
+      args:
+        creates: /etc/containerd/config.toml  
+
+    - name: Disable AppArmor in containerd config
+      ansible.builtin.lineinfile:
+        path: /etc/containerd/config.toml
+        regexp: '^\s*disable_apparmor\s*='
+        line: '    disable_apparmor = true'
+        insertafter: '^\s*\[plugins."io\.containerd\.grpc\.v1\.cri"\]'
+        backup: yes
+
+    - name: Update sandbox_image in containerd config
+      ansible.builtin.lineinfile:
+        path: /etc/containerd/config.toml
+        regexp: '^\s*sandbox_image\s*='
+        line: '    sandbox_image = "registry.k8s.io/pause:3.10"'
+        insertafter: '^\s*\[plugins."io\.containerd\.grpc\.v1\.cri"\]'
+        backup: yes
+
+    - name: Enable SystemdCgroup in containerd config
+      ansible.builtin.lineinfile:
+        path: /etc/containerd/config.toml
+        regexp: '^\s*SystemdCgroup\s*='
+        line: '            SystemdCgroup = true'
+        insertafter: '^\s*\[plugins."io\.containerd\.grpc\.v1\.cri"\.containerd\.runtimes\.runc\.options\]'
+        backup: yes
+
+    - name: Restart containerd service
+      ansible.builtin.service:
+        name: containerd
+        state: restarted
+        enabled: yes 
+
     # STEP 12: Auto-start Kubelet
     - name: Start kubelet service on boot
       ansible.builtin.service:
