@@ -10,6 +10,19 @@ I have worked on A1's F8. Added a packaging, versioning and releasing workflow t
 
 I have worked on A1's F9 and F10. Add a workflow to train the ML model, and removed the hard coded model from the dockerfile.
 
+- Arnas: https://github.com/doda25-team11/lib-version
+
+I worked on versioning and deployment of the lib-version. All commits there are mine this week. I worked on F1, F2 and F11.
+
+- Figen: https://github.com/doda25-team11/operation
+
+I have worked on A1's F7, writing the docker-compose file to onfiguring services, environment variables, networking, volume mapping.
+
+- Amy: https://github.com/doda25-team11/model-service/pull/2 & https://github.com/doda25-team11/model-service/pull/6
+
+I worked on F4 and F6, making sure multiple architectures are supported and being able to set the ports (both frontend and backend) manually.
+
+
 ### Week Q1.3 (Nov 24+)
 ### Week Q1.4 (Dec 1+)
 ### Week Q1.5 (Dec 8+)

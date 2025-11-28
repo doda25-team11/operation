@@ -1,7 +1,82 @@
----
-- hosts: all 
-  become: yes
+- hosts: all
+  become: true
+
+  vars:
+    ssh_public_key_files: # file path relative to this playbook
+      - "ssh_keys/rodrigo.pub"
+      # Add more keys, we need at least 2 (2 team members)
+
+    # STEP 7: sysctl parameters required by Kubernetes
+    k8s_sysctl_settings:
+      net.ipv4.ip_forward: 1
+      net.bridge.bridge-nf-call-iptables: 1
+      net.bridge.bridge-nf-call-ip6tables: 1
+    
+    # Step 4
+    - name: Install team SSH keys for vagrant user
+      authorized_key:
+        user: vagrant
+        state: present
+        key: "{{ lookup('file', item) }}"
+      loop: "{{ ssh_public_key_files }}"
+
+    # STEP 5a
+    - name: Disable swap immediately
+      shell: swapoff -a
+      when: ansible_facts['swaptotal_mb'] | default(0) > 0
+
+    # STEP 5b
+    - name: Ensure swap is disabled on reboot (remove swap entries from fstab)
+      lineinfile:
+        path: /etc/fstab
+        regexp: '\sswap\s'
+        state: absent
+        backup: yes
+
+    # STEP 6a
+    - name: Ensure k8s kernel modules config exists
+      copy:
+        dest: /etc/modules-load.d/k8s.conf
+        content: |
+          overlay
+          br_netfilter
+        owner: root
+        group: root
+        mode: '0644'
+
+    # STEP 6b
+    - name: Ensure overlay kernel module is loaded
+      modprobe:
+        name: overlay
+        state: present
+
+    # STEP 6c
+    - name: Ensure br_netfilter kernel module is loaded
+      modprobe:
+        name: br_netfilter
+        state: present
+
+    # Step 7
+    - name: Ensure Kubernetes-related sysctl settings are configured
+      sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value }}"
+        state: present
+        sysctl_set: true
+        reload: true
+      loop: "{{ k8s_sysctl_settings | dict2items }}"
+
+    # STEP 8: Manage /etc/hosts for cluster node name resolution
+    - name: Configure /etc/hosts for Kubernetes cluster
+      template:
+        src: templates/hosts.j2
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: '0644'
+        
   tasks:
+    # STEP 9: Add kubernetes repository:
     - name: Add GPG signing key for Kubernetes apt repository
       ansible.builtin.apt_key:
         url: https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key
@@ -11,6 +86,7 @@
       ansible.builtin.apt_repository:
         repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /
 
+    # STEP 10: Install K8s tools
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: yes
@@ -40,9 +116,9 @@
         name: kubectl=1.32.4-*
         allow_downgrade: yes
 
+    # STEP 12: Auto-start Kubelet
     - name: Start kubelet service on boot
       ansible.builtin.service:
         name: kubelet
         enabled: true
         state: started
-    
