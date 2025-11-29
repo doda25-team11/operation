@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
 
   # node resources based on step 1 specifications
   CTRL_MEM = 4096 # 4+ GB memory for control Node
-  CTRL_CPUS = 1   # 1 core for control Node
+  CTRL_CPUS = 2   # 1 core for control Node
   NODE_MEM = 6144 # 6+ GB memory for worker Node 
   NODE_CPUS = 2   # 2 cores for worker Node
 
@@ -17,6 +17,8 @@ Vagrant.configure("2") do |config|
 
   # Disable default synced folder to avoid WSL filesystem issues (Useful for windows users)
   config.vm.synced_folder ".", "/vagrant", disabled: true
+  # Enable a different shared folder to copy the config file to 
+  config.vm.synced_folder "host_shared", "/host_shared", type:"virtualbox"
 
   # general setup for ALL VMs
   # executes 'general.yml' on all nodes before node-specific provisioning
