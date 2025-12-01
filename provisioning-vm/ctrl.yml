@@ -1,20 +1,20 @@
 ---
+- hosts: ctrl
+  become: yes
+  tasks:
+
     # Step 13
-    - hosts: ctrl
-      become: yes
-      tasks:
     - name: Check existence admin.conf
       ansible.builtin.stat:
         path: /etc/kubernetes/admin.conf
       register: kubeconfig
-
 
     - name: Initialize cluster
       ansible.builtin.command: kubeadm init --apiserver-advertise-address=192.168.56.100 --node-name=ctrl --pod-network-cidr=10.244.0.0/16
       when: not kubeconfig.stat.exists
 
     # Step 14
-    - name: Ensure .kube directory exists
+    - name: Ensure /root/.kube directory exists
       file:
         path: /root/.kube
         state: directory
@@ -31,7 +31,7 @@
         remote_src: yes
       when: not kubeconfig.stat.exists
 
-    - name: Ensure .kube exists
+    - name: Ensure /home/vagrant/.kube exists
       file:
         path: /home/vagrant/.kube/
         state: directory
@@ -66,54 +66,25 @@
         url: https://raw.githubusercontent.com/flannel-io/flannel/v0.26.7/Documentation/kube-flannel.yml
         dest: /tmp/kube-flannel.yml
         mode: '0644'
+      when: not kubeconfig.stat.exists
 
-    - name: Ensure Flannel DaemonSet uses host-only interface
-      lineinfile:
+    - name: Patch Flannel DaemonSet to use eth1
+      replace:
         path: /tmp/kube-flannel.yml
-        regexp: '^\s*- --iface=eth1$'
-        line: '        - --iface=eth1'
-        insertafter: '^\s*- --kube-subnet-mgr$'
-        state: present
+        regexp: '(\s*-\s*--kube-subnet-mgr)'
+        replace: '\1\n        - --iface=eth1'
+      when: not kubeconfig.stat.exists
 
     - name: Apply Flannel network
       command: kubectl apply -f /tmp/kube-flannel.yml
       environment:
         KUBECONFIG: /etc/kubernetes/admin.conf
+      when: not kubeconfig.stat.exists
 
     - name: Wait for Flannel pods to be ready
-      shell: |
-        kubectl wait --for=condition=Ready pod -l app=flannel -n kube-flannel --timeout=180s
+      command: >
+        kubectl wait --for=condition=Ready pod
+        -l app=flannel -n kube-flannel --timeout=180s
       environment:
         KUBECONFIG: /etc/kubernetes/admin.conf
-
-    # Step 16: Install Helm
-    # - name: Install dependencies for Helm
-    #   ansible.builtin.apt:
-    #     name:
-    #       - apt-transport-https
-    #       - ca-certificates
-    #       - curl
-    #       - gnupg
-    #     state: present
-    #     update_cache: yes
-
-    # - name: Add Helm GPG key
-    #   ansible.builtin.apt_key:
-    #     url: https://baltocdn.com/helm/signing.asc
-    #     state: present
-
-    # - name: Add Helm repository
-    #   ansible.builtin.apt_repository:
-    #     repo: "deb https://baltocdn.com/helm/stable/debian/ all main"
-    #     state: present
-    #     filename: helm
-
-    # - name: Update apt cache
-    #   ansible.builtin.apt:
-    #     update_cache: yes
-
-    # - name: Install Helm
-    #   ansible.builtin.apt:
-    #     name: helm
-    #     state: present
-
+      when: not kubeconfig.stat.exists
