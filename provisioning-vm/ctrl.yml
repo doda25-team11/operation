@@ -1,22 +1,19 @@
 ---
-- hosts: ctrl
-  become: yes
-  tasks:
-    # Placeholder for now
-    - name: Ensure controller logic can begin
-      ansible.builtin.debug:
-        msg: "Controller setup placeholder executed successfully."
-
+    # Step 13
+    - hosts: ctrl
+      become: yes
+      tasks:
     - name: Check existence admin.conf
       ansible.builtin.stat:
         path: /etc/kubernetes/admin.conf
       register: kubeconfig
 
-    # Step 13
+
     - name: Initialize cluster
       ansible.builtin.command: kubeadm init --apiserver-advertise-address=192.168.56.100 --node-name=ctrl --pod-network-cidr=10.244.0.0/16
       when: not kubeconfig.stat.exists
 
+    # Step 14
     - name: Ensure .kube directory exists
       file:
         path: /root/.kube
@@ -24,7 +21,6 @@
         mode: '0700'
       when: not kubeconfig.stat.exists
 
-    # Step 14
     - name: Copy admin.conf for kubectl usage
       copy:
         src: /etc/kubernetes/admin.conf
