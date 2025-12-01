@@ -2,7 +2,96 @@
 - hosts: ctrl
   become: yes
   tasks:
-    # Placeholder for now
-    - name: Ensure controller logic can begin
-      ansible.builtin.debug:
-        msg: "Controller setup placeholder executed successfully."
+
+    # Step 13
+    - name: Check existence admin.conf
+      ansible.builtin.stat:
+        path: /etc/kubernetes/admin.conf
+      register: kubeconfig
+
+    - name: Initialize cluster
+      ansible.builtin.command: kubeadm init --apiserver-advertise-address=192.168.56.100 --node-name=ctrl --pod-network-cidr=10.244.0.0/16
+      when: not kubeconfig.stat.exists
+
+    # Step 14
+    - name: Ensure /root/.kube directory exists
+      file:
+        path: /root/.kube
+        state: directory
+        mode: '0700'
+      when: not kubeconfig.stat.exists
+
+    - name: Copy admin.conf for kubectl usage
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /root/.kube/config
+        owner: root
+        group: root
+        mode: '0600'
+        remote_src: yes
+      when: not kubeconfig.stat.exists
+
+    - name: Ensure /home/vagrant/.kube exists
+      file:
+        path: /home/vagrant/.kube/
+        state: directory
+        mode: '0700'
+        owner: vagrant
+        group: vagrant
+      when: not kubeconfig.stat.exists
+
+    - name: Copy admin.conf for vagrant user
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/vagrant/.kube/config
+        owner: vagrant
+        group: vagrant
+        mode: '0600'
+        remote_src: yes
+      when: not kubeconfig.stat.exists
+
+    - name: Copy admin.conf for host
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /vagrant/.vagrant/admin.conf
+        owner: vagrant
+        group: vagrant
+        mode: '0600'
+        remote_src: yes
+      when: not kubeconfig.stat.exists
+
+    # Step 15: Install Flannel Pod network
+    - name: Download Flannel YAML
+      get_url:
+        url: https://raw.githubusercontent.com/flannel-io/flannel/v0.26.7/Documentation/kube-flannel.yml
+        dest: /tmp/kube-flannel.yml
+        mode: '0644'
+      when: not kubeconfig.stat.exists
+
+    - name: Patch Flannel DaemonSet to use eth1
+      replace:
+        path: /tmp/kube-flannel.yml
+        regexp: '(\s*-\s*--kube-subnet-mgr)'
+        replace: '\1\n        - --iface=eth1'
+      when: not kubeconfig.stat.exists
+
+    - name: Wait for the API server
+      wait_for:
+        host: 192.168.56.100
+        port: 6443
+        timeout: 300
+        delay: 5
+
+    - name: Apply Flannel network
+      command: kubectl apply -f /tmp/kube-flannel.yml
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+      when: not kubeconfig.stat.exists
+
+    - name: Wait for Flannel pods to be ready
+      command: >
+        kubectl wait --for=condition=Ready pod
+        -l app=flannel -n kube-flannel --timeout=180s
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+      when: not kubeconfig.stat.exists
