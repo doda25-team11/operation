@@ -53,7 +53,7 @@
     - name: Copy admin.conf for host
       copy:
         src: /etc/kubernetes/admin.conf
-        dest: /host_shared/admin.conf
+        dest: /vagrant/.vagrant/admin.conf
         owner: vagrant
         group: vagrant
         mode: '0600'
@@ -74,6 +74,13 @@
         regexp: '(\s*-\s*--kube-subnet-mgr)'
         replace: '\1\n        - --iface=eth1'
       when: not kubeconfig.stat.exists
+
+    - name: Wait for the API server
+      wait_for:
+        host: 192.168.56.100
+        port: 6443
+        timeout: 300
+        delay: 5
 
     - name: Apply Flannel network
       command: kubectl apply -f /tmp/kube-flannel.yml
