@@ -100,6 +100,37 @@ Destroy all VMs:
 vagrant destroy -f
 ```
 
+### Helm Installation
+
+
+Check the chart
+```bash
+helm lint .
+helm template test-release .
+```
+
+Install / upgrade the release after changes
+```bash
+helm install test-release .
+helm upgrade test-release .
+```
+To create a secret to be able to pull the latest images from the github repository 
+This does not store your info in any public place
+```bash
+kubectl create secret docker-registry ghcr-credentials \
+  --docker-server=ghcr.io \
+  --docker-username=YOUR_GITHUB_USERNAME \
+  --docker-password='YOUR_GHCR_PAT'
+```
+
+To run with ingress (or set the variable to true in values.yaml)
+```bash
+helm upgrade test-release . \
+  --set ingress.enabled=true \
+  --set ingress.host="sms-checker.local"
+
+```
+
 ***
 
 ### App 

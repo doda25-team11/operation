@@ -1,0 +1,29 @@
+# Default values for the sms-checker Helm chart.
+# These can be overridden at install time with --values or --set.
+
+app:
+  image:
+    repository: "ghcr.io/doda25-team11/app"
+    tag: "0.latest"
+  replicaCount: 1
+
+modelService:
+  image:
+    repository: "ghcr.io/doda25-team11/model-service"
+    tag: "latest"
+  replicaCount: 1
+
+  servicePort: 80
+  serviceNameOverride: ""
+
+imagePullSecrets:
+  - name: ghcr-credentials
+
+ingress:
+  enabled: false              # Should be turned to true later
+  className: ""
+  host: "sms-checker.local"  # placeholder, will be overridden per cluster
+  annotations: {}
+
+
+# Add here stuff like prometheus and grafana later

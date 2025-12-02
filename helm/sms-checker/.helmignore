@@ -1,0 +1,10 @@
+# Files and directories that Helm should ignore when packaging the chart.
+# This was suggested as a 'best practice'
+
+.git/
+.idea/
+.vscode/
+*.swp
+*.bak
+*.tmp
+*.log
