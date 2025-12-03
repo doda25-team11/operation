@@ -102,6 +102,25 @@ vagrant destroy -f
 
 ### Helm Installation
 
+**Note:** Before running the Helm commands, make sure your Kubernetes cluster is reachable with `kubectl`. For example:
+```bash
+kubectl config current-context
+kubectl get nodes
+```
+This should list a context (e.g `minikube`) and at least one node (e.g. `minikube` or `ctrl`).
+
+
+Install Helm 3 (follow the official docs for your OS).
+Ex:
+```bash
+sudo snap install helm --classic
+````
+
+Make sure you are in …/helm/sms-checker
+```bash
+cd helm/sms-checker
+```
+
 
 Check the chart
 ```bash
