@@ -24,6 +24,11 @@ I worked on F4 and F6, making sure multiple architectures are supported and bein
 
 
 ### Week Q1.3 (Nov 24+)
+
+- Arnas: https://github.com/doda25-team11/operation/pull/10
+
+I have worked on steps 18 and 19. I have helped wih 16 and 17 of A2.
+
 ### Week Q1.4 (Dec 1+)
 ### Week Q1.5 (Dec 8+)
 ### Week Q1.6 (Dec 15+)
