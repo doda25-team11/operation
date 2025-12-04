@@ -147,7 +147,14 @@ To run with ingress (or set the variable to true in values.yaml)
 helm upgrade test-release . \
   --set ingress.enabled=true \
   --set ingress.host="sms-checker.local"
+```
 
+To run this with port-forwarding: app and model
+```bash
+kubectl port-forward svc/test-release-sms-checker-app 8080:80
+```
+```bash
+kubectl port-forward svc/test-release-sms-checker-model 8081:80
 ```
 
 ***

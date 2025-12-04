@@ -15,6 +15,7 @@ modelService:
 
   servicePort: 80
   serviceNameOverride: ""
+  modelVersionTag: "model-20251118-102052"
 
 imagePullSecrets:
   - name: ghcr-credentials

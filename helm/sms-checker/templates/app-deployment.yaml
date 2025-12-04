@@ -35,6 +35,8 @@ spec:
           env:
             - name: MODEL_SERVICE_URL
               value: "http://{{ $modelServiceName }}:{{ .Values.modelService.servicePort }}"
+            - name: MODEL_HOST
+              value: "http://{{ $modelServiceName }}:{{ .Values.modelService.servicePort }}"
           envFrom:
             - configMapRef:
                 name: {{ include "sms-checker.fullname" . }}-app-config
