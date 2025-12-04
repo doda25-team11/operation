@@ -13,6 +13,8 @@
 
   tasks:
 
+    # step 20
+
     - name: Apply MetalLB CRDs and core components
       ansible.builtin.command:
         cmd: kubectl apply -f /vagrant/k8s/metallb-native.yml
@@ -37,5 +39,29 @@
           kubectl wait -n metallb-system
           -l app=metallb,component=controller
           --for=condition=ready pod --timeout=60s
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+
+    # step 21
+
+    - name: Add ingress-nginx Helm repository
+      ansible.builtin.command:
+        cmd: helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx --force-update
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+
+    - name: Helm repo update
+      ansible.builtin.command:
+        cmd: helm repo update
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+
+    - name: Install ingress-nginx
+      ansible.builtin.command:
+        cmd: >
+          helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx
+          --namespace {{ ingress_nginx_namespace }}
+          --create-namespace
+          --values /vagrant/k8s/ingress-nginx-values.yaml
       environment:
         KUBECONFIG: "{{ kubeconfig_path }}"
