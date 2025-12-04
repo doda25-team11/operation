@@ -1,0 +1,41 @@
+---
+- hosts: all
+  become: true
+
+  vars:
+    kubeconfig_path: /etc/kubernetes/admin.conf
+    metallb_namespace: metallb-system
+    metallb_ip_range: 192.168.56.90-192.168.56.99
+    ingress_nginx_namespace: ingress-nginx
+    ingress_nginx_ip: 192.168.56.90
+    dashboard_namespace: kubernetes-dashboard
+    istio_lb_ip: 192.168.56.91
+
+  tasks:
+
+    - name: Apply MetalLB CRDs and core components
+      ansible.builtin.command:
+        cmd: kubectl apply -f /vagrant/k8s/metallb-native.yml
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+
+    - name: Apply MetalLB IPAddressPool
+      ansible.builtin.command:
+        cmd: kubectl apply -f /vagrant/k8s/metallb-ip-pool.yml
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+
+    - name: Apply MetalLB L2Advertisement
+      ansible.builtin.command:
+        cmd: kubectl apply -f /vagrant/k8s/metallb-l2advertisement.yml
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+
+    - name: Wait for MetalLB controller to be ready
+      ansible.builtin.command:
+        cmd: >
+          kubectl wait -n metallb-system
+          -l app=metallb,component=controller
+          --for=condition=ready pod --timeout=60s
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
