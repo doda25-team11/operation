@@ -44,6 +44,9 @@ I code reviewed: https://github.com/doda25-team11/operation/pull/2
 
 NOTE: I helped Amy with her step 15 because that didn't work. She couldn't figure it out so I implemented the fixes in her PR.
 
+- Amy: https://github.com/doda25-team11/operation/pull/7
+I worked on step 13-17. There were some troubles with copying the admin file to the host, so I got some help with that. I reviewed/tested steps 4-8. 
+
 ### Week Q1.4 (Dec 1+)
 - Bill: https://github.com/doda25-team11/operation/pull/9
 I implemented steps 16 and 17 of assignment 2 still.
