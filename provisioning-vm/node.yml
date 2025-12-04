@@ -6,3 +6,23 @@
     - name: Ensure worker logic can begin
       ansible.builtin.debug:
         msg: "Worker setup placeholder executed successfully."
+
+    # Task 18
+    - name: Generate join command on controller
+      become: yes
+      delegate_to: ctrl
+      run_once: true
+      command: kubeadm token create --print-join-command --kubeconfig=/etc/kubernetes/admin.conf
+      register: join_cmd
+
+    # Task 19
+    - name: Save join command on worker
+      copy:
+        dest: /tmp/join-command.sh
+        content: "{{ join_cmd.stdout }}\n"
+        mode: '0700'
+
+    - name: Join the Kubernetes cluster
+      shell: bash /tmp/join-command.sh
+      args:
+        creates: /etc/kubernetes/kubelet.conf
