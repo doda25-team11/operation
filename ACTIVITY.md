@@ -47,6 +47,9 @@ NOTE: I helped Amy with her step 15 because that didn't work. She couldn't figur
 - Amy: https://github.com/doda25-team11/operation/pull/7
 I worked on step 13-17. There were some troubles with copying the admin file to the host, so I got some help with that. I reviewed/tested steps 4-8. 
 
+- Rodrigo: https://github.com/doda25-team11/operation/pull/3
+I worked on steps 4-8 and reviewed steps 1-3. I also worked on fixing F10 because it still used 'latest' (although this PR was merged in Week 4)
+
 ### Week Q1.4 (Dec 1+)
 - Bill: https://github.com/doda25-team11/operation/pull/9
 I implemented steps 16 and 17 of assignment 2 still.
