@@ -95,3 +95,23 @@
       environment:
         KUBECONFIG: /etc/kubernetes/admin.conf
       when: not kubeconfig.stat.exists
+
+    # Step 16: Install helm
+    - name: Add GPG signing key for Helm apt repository
+      ansible.builtin.apt_key:
+        url: https://packages.buildkite.com/helm-linux/helm-debian/gpgkey
+        keyring: /etc/apt/keyrings/helm.gpg
+
+    - name: Add Helm apt repository
+      ansible.builtin.apt_repository:
+        repo: deb [signed-by=/etc/apt/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main
+
+    - name: Install Helm
+      ansible.builtin.apt:
+        name: helm
+        state: present
+        allow_downgrade: yes
+      
+    # Step 17: Install Helm diff 
+    - name: Install Helm Diff plugin
+      shell: helm plugin install https://github.com/databus23/helm-diff
