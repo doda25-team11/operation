@@ -105,11 +105,13 @@
     - name: Add Helm apt repository
       ansible.builtin.apt_repository:
         repo: deb [signed-by=/etc/apt/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main
-    
-    - name: Update apt cache
+
+    - name: Install Helm
       ansible.builtin.apt:
-        update_cache: yes
+        name: helm
+        state: present
+        allow_downgrade: yes
       
     # Step 17: Install Helm diff 
     - name: Install Helm Diff plugin
-      command: helm plugin install https://github.com/databus23/helm-diff --verify=false
+      shell: helm plugin install https://github.com/databus23/helm-diff
