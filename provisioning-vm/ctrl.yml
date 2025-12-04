@@ -114,4 +114,10 @@
       
     # Step 17: Install Helm diff 
     - name: Install Helm Diff plugin
-      shell: helm plugin install https://github.com/databus23/helm-diff
+      ansible.builtin.command:
+        cmd: helm plugin install https://github.com/databus23/helm-diff
+      register: helm_diff_install
+      failed_when: >
+        helm_diff_install.rc != 0 and
+        'plugin already exists' not in helm_diff_install.stderr
+      changed_when: "'plugin already exists' not in helm_diff_install.stderr"
