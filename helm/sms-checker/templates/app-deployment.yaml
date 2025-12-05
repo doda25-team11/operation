@@ -1,0 +1,48 @@
+{{- $defaultModelSvcName := printf "%s-model" (include "sms-checker.fullname" .) }}
+{{- $modelServiceName := default $defaultModelSvcName .Values.modelService.serviceNameOverride }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sms-checker.fullname" . }}-app
+  labels:
+    app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "app"
+spec:
+  replicas: {{ .Values.app.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "app"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "app"
+    spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.imagePullSecrets }}
+        - name: {{ .name }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: app
+          image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MODEL_SERVICE_URL
+              value: "http://{{ $modelServiceName }}:{{ .Values.modelService.servicePort }}"
+            - name: MODEL_HOST
+              value: "http://{{ $modelServiceName }}:{{ .Values.modelService.servicePort }}"
+          envFrom:
+            - configMapRef:
+                name: {{ include "sms-checker.fullname" . }}-app-config
+            - secretRef:
+                name: {{ include "sms-checker.fullname" . }}-app-secret
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP

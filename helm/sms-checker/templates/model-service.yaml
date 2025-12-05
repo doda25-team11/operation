@@ -1,0 +1,20 @@
+{{- $defaultModelSvcName := printf "%s-model" (include "sms-checker.fullname" .) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ default $defaultModelSvcName .Values.modelService.serviceNameOverride }}
+  labels:
+    app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "model"
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "model"
+  ports:
+    - name: http
+      port: {{ .Values.modelService.servicePort }}
+      targetPort: http
+      protocol: TCP
