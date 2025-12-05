@@ -14,7 +14,7 @@ I have worked on A1's F9 and F10. Add a workflow to train the ML model, and remo
 
 I worked on versioning and deployment of the lib-version. All commits there are mine this week. I worked on F1, F2 and F11.
 
-- Figen: https://github.com/doda25-team11/operation
+- Figen: https://github.com/doda25-team11/operation/1
 
 I have worked on A1's F7, writing the docker-compose file to onfiguring services, environment variables, networking, volume mapping.
 
@@ -49,6 +49,9 @@ I worked on step 13-17. There were some troubles with copying the admin file to 
 
 - Rodrigo: https://github.com/doda25-team11/operation/pull/3
 I worked on steps 4-8 and reviewed steps 1-3. I also worked on fixing F10 because it still used 'latest' (although this PR was merged in Week 4)
+
+- Figen: https://github.com/doda25-team11/operation/1
+Created VMs for bothworker and control and using ansible
 
 ### Week Q1.4 (Dec 1+)
 - Bill: https://github.com/doda25-team11/operation/pull/9
