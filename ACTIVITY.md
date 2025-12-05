@@ -2,7 +2,7 @@
 No work
 ### Week Q1.2 (Nov 17+)
 
-- Radu: https://github.com/doda25-team11/app/pull/3 & https://github.com/doda25-team11/model-service/pull/4
+- Radu: https://github.com/doda25-team11/app/pull/3 & https://github.com/doda25-team11/model-service/pull/4, reviewed https://github.com/doda25-team11/model-service/pull/5
 
 I have worked on A1's F8. Added a packaging, versioning and releasing workflow to both the app and model-service repositories, that parses the version from the app repo's pom.xml and releases the container images of both to the GitHub registry.
 
@@ -49,6 +49,10 @@ NOTE: I helped Amy with her step 15 because that didn't work. She couldn't figur
 I implemented steps 16 and 17 of assignment 2 still.
 
 I code reviewed: https://github.com/doda25-team11/operation/pull/7
+
+- Radu: https://github.com/doda25-team11/operation/pull/11
+
+I have assigned myself to complete the last steps of A2 (20-23), and only got to work on them in W4 because the repo was not yet in a state where we were confident there were no task dependencies affecting steps 20-23
 
 ### Week Q1.5 (Dec 8+)
 ### Week Q1.6 (Dec 15+)
