@@ -1,0 +1,66 @@
+---
+- hosts: controller
+  become: true
+
+  vars:
+    kubeconfig_path: /etc/kubernetes/admin.conf
+    metallb_namespace: metallb-system
+    metallb_ip_range: 192.168.56.90-192.168.56.99
+    ingress_nginx_namespace: ingress-nginx
+    ingress_nginx_ip: 192.168.56.90
+    dashboard_namespace: kubernetes-dashboard
+    istio_lb_ip: 192.168.56.91
+
+  tasks:
+
+    # step 20
+
+    - name: Apply MetalLB CRDs and core components
+      kubernetes.core.k8s:
+        state: present
+        src: /vagrant/k8s/metallb-native.yaml
+        kubeconfig: "{{ kubeconfig_path }}"
+
+    - name: Apply MetalLB IPAddressPool
+      kubernetes.core.k8s:
+        state: present
+        src: /vagrant/k8s/metallb-ip-pool.yml
+        kubeconfig: "{{ kubeconfig_path }}"
+
+    - name: Apply MetalLB L2Advertisement
+      kubernetes.core.k8s:
+        state: present
+        src: /vagrant/k8s/metallb-l2advertisement.yml
+        kubeconfig: "{{ kubeconfig_path }}"
+
+    - name: Wait for MetalLB controller to be ready
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Pod
+        namespace: metallb-system
+        label_selectors:
+          - app=metallb
+          - component=controller
+      register: metallb_pods
+      until: metallb_pods.resources | length > 0 and
+             metallb_pods.resources[0].status.containerStatuses[0].ready
+      retries: 20
+      delay: 3
+
+    # step 21
+
+    - name: Add ingress-nginx Helm repository
+      kubernetes.core.helm_repository:
+        name: ingress-nginx
+        repo_url: https://kubernetes.github.io/ingress-nginx
+
+    - name: Install ingress-nginx via Helm
+      kubernetes.core.helm:
+        name: ingress-nginx
+        chart_ref: ingress-nginx/ingress-nginx
+        release_namespace: "{{ ingress_nginx_namespace }}"
+        create_namespace: true
+        values_files:
+          - /vagrant/k8s/ingress-nginx-values.yml
+        kubeconfig: "{{ kubeconfig_path }}"
+        wait: true
