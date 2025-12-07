@@ -62,6 +62,9 @@ I code reviewed: https://github.com/doda25-team11/operation/pull/7
 - Rodrigo: https://github.com/doda25-team11/operation/pull/8 + PR mentioned in the previous week
 I implemented the helm chart and part of the migration. I code reviewed PRs related to Steps 16-17 and 20-21
 
+- Amy
+I didn't create any new PR's. I finalized step 13-17 (see week 3) and spent time on making the In-class exercises work on my own laptop.
+
 ### Week Q1.5 (Dec 8+)
 ### Week Q1.6 (Dec 15+)
 ### Week Q1.7 (Jan 5+)
