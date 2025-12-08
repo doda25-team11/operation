@@ -1,11 +1,31 @@
----
 - hosts: all 
   become: yes
   tasks:
-    # Placeholder for now
-    - name: Ensure worker logic can begin
-      ansible.builtin.debug:
-        msg: "Worker setup placeholder executed successfully."
+    - name: Wait for admin.conf to exist on controller
+      delegate_to: ctrl
+      run_once: true
+      stat:
+        path: /etc/kubernetes/admin.conf
+      register: kubeconfig_check
+      retries: 30
+      delay: 10
+      until: kubeconfig_check.stat.exists
+
+    - name: Wait for admin.conf to exist on controller
+      delegate_to: ctrl
+      run_once: true
+      stat:
+        path: /etc/kubernetes/admin.conf
+      register: kubeconfig_check
+      retries: 30
+      delay: 10
+      until: kubeconfig_check.stat.exists
+
+    - name: Generate join command on controller
+      delegate_to: ctrl
+      run_once: true
+      command: kubeadm token create --print-join-command --kubeconfig=/etc/kubernetes/admin.conf
+      register: join_cmd
 
     # Task 18
     - name: Generate join command on controller
