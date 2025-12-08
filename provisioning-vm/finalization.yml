@@ -133,3 +133,35 @@
                       name: kubernetes-dashboard
                       port:
                         number: 443
+
+    # step 23
+
+    - name: Download Istio archive
+      ansible.builtin.get_url:
+        url: https://github.com/istio/istio/releases/download/1.25.2/istio-1.25.2-linux-amd64.tar.gz
+        dest: /tmp/istio.tar.gz
+        mode: '0644'
+
+    - name: Extract Istio
+      ansible.builtin.unarchive:
+        src: /tmp/istio.tar.gz
+        dest: /home/vagrant/
+        remote_src: true
+      become_user: vagrant
+
+    - name: Add istioctl to PATH for vagrant user
+      ansible.builtin.lineinfile:
+        path: /home/vagrant/.bashrc
+        line: 'export PATH=$PATH:/home/vagrant/istio-1.25.2/bin'
+        state: present
+      become_user: vagrant
+
+    - name: Install Istio with custom LoadBalancer IP
+      ansible.builtin.shell: |
+        /home/vagrant/istio-1.25.2/bin/istioctl install -y -f /vagrant/istio/istio-config.yml
+      args:
+        executable: /bin/bash
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+      become_user: vagrant
+
