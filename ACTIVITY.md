@@ -75,9 +75,9 @@ I didn't create any new PR's. I finalized step 13-17 (see week 3) and spent time
 
 ### Week Q1.5 (Dec 8+)
 
-- Radu: https://github.com/doda25-team11/operation/pull/11
+- Radu: https://github.com/doda25-team11/operation/pull/11, https://github.com/doda25-team11/operation/pull/12
 
-Still working on testing and merging A2's steps 20-21, made PR for A2's steps 22-23
+Still working on testing and merging A2's steps 20-21, made PR for A2's steps 22-23 and starting to work on A3
 
 ### Week Q1.6 (Dec 15+)
 ### Week Q1.7 (Jan 5+)
