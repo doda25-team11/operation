@@ -64,3 +64,72 @@
           - /vagrant/k8s/ingress-nginx-values.yml
         kubeconfig: "{{ kubeconfig_path }}"
         wait: true
+
+    # step 22
+
+    - name: Add Kubernetes Dashboard Helm repo
+      kubernetes.core.helm_repository:
+        name: kubernetes-dashboard
+        repo_url: https://kubernetes.github.io/dashboard/
+
+    - name: Install Kubernetes Dashboard
+      kubernetes.core.helm:
+        name: k8s-dashboard
+        chart_ref: kubernetes-dashboard/kubernetes-dashboard
+        release_namespace: kubernetes-dashboard
+        create_namespace: true
+        values:
+          protocolHttp: true
+        kubeconfig: "{{ kubeconfig_path }}"
+
+    - name: Create Dashboard admin user
+      kubernetes.core.k8s:
+        state: present
+        namespace: kubernetes-dashboard
+        definition:
+          apiVersion: v1
+          kind: ServiceAccount
+          metadata:
+            name: admin-user
+
+    - name: Bind admin-user to cluster-admin
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRoleBinding
+          metadata:
+            name: dashboard-admin
+          subjects:
+          - kind: ServiceAccount
+            name: admin-user
+            namespace: kubernetes-dashboard
+          roleRef:
+            kind: ClusterRole
+            name: cluster-admin
+            apiGroup: rbac.authorization.k8s.io
+
+    - name: Expose Kubernetes Dashboard through Ingress
+      kubernetes.core.k8s:
+        state: present
+        namespace: kubernetes-dashboard
+        definition:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: dashboard-ingress
+            annotations:
+              nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          spec:
+            ingressClassName: nginx
+            rules:
+            - host: dashboard.local
+              http:
+                paths:
+                - path: /
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: kubernetes-dashboard
+                      port:
+                        number: 443
