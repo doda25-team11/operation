@@ -50,7 +50,7 @@ I worked on step 13-17. There were some troubles with copying the admin file to 
 - Rodrigo: https://github.com/doda25-team11/operation/pull/3
 I worked on steps 4-8 and reviewed steps 1-3. I also worked on fixing F10 because it still used 'latest' (although this PR was merged in Week 4)
 
-- Figen: https://github.com/doda25-team11/operation/pull/1
+- Figen: https://github.com/doda25-team11/operation/pull/2
 Created VMs for bothworker and control and using ansible
 
 - Radu
