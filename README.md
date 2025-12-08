@@ -100,6 +100,63 @@ Destroy all VMs:
 vagrant destroy -f
 ```
 
+### Helm Installation
+
+**Note:** Before running the Helm commands, make sure your Kubernetes cluster is reachable with `kubectl`. For example:
+```bash
+kubectl config current-context
+kubectl get nodes
+```
+This should list a context (e.g `minikube`) and at least one node (e.g. `minikube` or `ctrl`).
+
+
+Install Helm 3 (follow the official docs for your OS).
+Ex:
+```bash
+sudo snap install helm --classic
+````
+
+Make sure you are in …/helm/sms-checker
+```bash
+cd helm/sms-checker
+```
+
+
+Check the chart
+```bash
+helm lint .
+helm template test-release .
+```
+
+Install / upgrade the release after changes
+```bash
+helm install test-release .
+helm upgrade test-release .
+```
+To create a secret to be able to pull the latest images from the github repository 
+This does not store your info in any public place
+```bash
+kubectl create secret docker-registry ghcr-credentials \
+  --docker-server=ghcr.io \
+  --docker-username=YOUR_GITHUB_USERNAME \
+  --docker-password='YOUR_GHCR_PAT'
+```
+
+To run with ingress (or set the variable to true in values.yaml)
+```bash
+helm upgrade test-release . \
+  --set ingress.enabled=true \
+  --set ingress.host="sms-checker.local"
+```
+
+To run this with port-forwarding: app and model
+```bash
+kubectl port-forward svc/test-release-sms-checker-app 8080:80
+```
+```bash
+kubectl port-forward svc/test-release-sms-checker-model 8081:80
+```
+
 ***
 
 ### App 

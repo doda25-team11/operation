@@ -14,7 +14,7 @@ I have worked on A1's F9 and F10. Add a workflow to train the ML model, and remo
 
 I worked on versioning and deployment of the lib-version. All commits there are mine this week. I worked on F1, F2 and F11.
 
-- Figen: https://github.com/doda25-team11/operation
+- Figen: https://github.com/doda25-team11/operation/1
 
 I have worked on A1's F7, writing the docker-compose file to onfiguring services, environment variables, networking, volume mapping.
 
@@ -44,6 +44,15 @@ I code reviewed: https://github.com/doda25-team11/operation/pull/2
 
 NOTE: I helped Amy with her step 15 because that didn't work. She couldn't figure it out so I implemented the fixes in her PR.
 
+- Amy: https://github.com/doda25-team11/operation/pull/7
+I worked on step 13-17. There were some troubles with copying the admin file to the host, so I got some help with that. I reviewed/tested steps 4-8. 
+
+- Rodrigo: https://github.com/doda25-team11/operation/pull/3
+I worked on steps 4-8 and reviewed steps 1-3. I also worked on fixing F10 because it still used 'latest' (although this PR was merged in Week 4)
+
+- Figen: https://github.com/doda25-team11/operation/1
+Created VMs for bothworker and control and using ansible
+
 ### Week Q1.4 (Dec 1+)
 - Bill: https://github.com/doda25-team11/operation/pull/9
 I implemented steps 16 and 17 of assignment 2 still.
@@ -53,6 +62,12 @@ I code reviewed: https://github.com/doda25-team11/operation/pull/7
 - Radu: https://github.com/doda25-team11/operation/pull/11
 
 I have assigned myself to complete the last steps of A2 (20-23), and only got to work on them in W4 because the repo was not yet in a state where we were confident there were no task dependencies affecting steps 20-23
+
+- Rodrigo: https://github.com/doda25-team11/operation/pull/8 + PR mentioned in the previous week
+I implemented the helm chart and part of the migration. I code reviewed PRs related to Steps 16-17 and 20-21
+
+- Amy
+I didn't create any new PR's. I finalized step 13-17 (see week 3) and spent time on making the In-class exercises work on my own laptop.
 
 ### Week Q1.5 (Dec 8+)
 ### Week Q1.6 (Dec 15+)
