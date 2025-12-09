@@ -76,6 +76,10 @@ I didn't create any new PR's. I finalized step 13-17 (see week 3) and spent time
 - Figen
 I did not make any PR's. I spent my time on making the in-class exercises and started with A3, but have not made much progress yet.
 
+- Arnas
+
+- I have assigned myself step 3 of A3. I also fixed some bugs.
+
 ### Week Q1.5 (Dec 8+)
 
 - Radu: https://github.com/doda25-team11/operation/pull/11, https://github.com/doda25-team11/operation/pull/12
