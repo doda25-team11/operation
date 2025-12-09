@@ -34,7 +34,7 @@ NOTE: I helped Amy with F6 and tested the code with her.
 
 - Arnas: https://github.com/doda25-team11/operation/pull/10
 
-I have worked on steps 18 and 19. I have helped wih 16 and 17 of A2.
+I have worked on steps 18 and 19. 
 
 - Bill: https://github.com/doda25-team11/operation/pull/4 & https://github.com/doda25-team11/operation/pull/5 & https://github.com/doda25-team11/operation/pull/2
 
@@ -77,8 +77,7 @@ I didn't create any new PR's. I finalized step 13-17 (see week 3) and spent time
 I did not make any PR's. I spent my time on making the in-class exercises and started with A3, but have not made much progress yet.
 
 - Arnas
-
-- I have assigned myself step 3 of A3. I also fixed some bugs.
+I have assigned myself step 3 of A3. I also fixed some bugs. I have helped wih 16 and 17 of A2.
 
 ### Week Q1.5 (Dec 8+)
 
