@@ -12,55 +12,66 @@
     istio_lb_ip: 192.168.56.91
 
   tasks:
+    - name: Wait for Kubernetes API to be reachable
+      ansible.builtin.command:
+        cmd: kubectl get nodes
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+      register: api_check
+      retries: 20
+      delay: 6
+      until: api_check.rc == 0
+      changed_when: false
 
     # step 20
 
-    - name: Apply MetalLB CRDs and core components
-      kubernetes.core.k8s:
-        state: present
-        src: /vagrant/k8s/metallb-native.yaml
-        kubeconfig: "{{ kubeconfig_path }}"
+    - name: Apply MetalLB CRDs and core components (disable validation for CRDs)
+      ansible.builtin.command:
+        cmd: >
+          kubectl apply
+          --validate=false
+          -f /vagrant/k8s/metallb-native.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+
+    - name: Wait for MetalLB controller pod to be Ready
+      ansible.builtin.command:
+        cmd: >
+          kubectl wait -n metallb-system
+          -l app=metallb,component=controller
+          --for=condition=ready pod --timeout=120s
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+      register: metallb_wait
+      retries: 5
+      delay: 5
+      until: metallb_wait.rc == 0
 
     - name: Apply MetalLB IPAddressPool
-      kubernetes.core.k8s:
-        state: present
-        src: /vagrant/k8s/metallb-ip-pool.yml
-        kubeconfig: "{{ kubeconfig_path }}"
+      ansible.builtin.command:
+        cmd: kubectl apply -f /vagrant/k8s/metallb-ip-pool.yml
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
 
     - name: Apply MetalLB L2Advertisement
-      kubernetes.core.k8s:
-        state: present
-        src: /vagrant/k8s/metallb-l2advertisement.yml
-        kubeconfig: "{{ kubeconfig_path }}"
+      ansible.builtin.command:
+        cmd: kubectl apply -f /vagrant/k8s/metallb-l2advertisement.yml
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
 
-    - name: Wait for MetalLB controller to be ready
-      kubernetes.core.k8s_info:
-        api_version: v1
-        kind: Pod
-        namespace: metallb-system
-        label_selectors:
-          - app=metallb
-          - component=controller
-      register: metallb_pods
-      until: metallb_pods.resources | length > 0 and
-             metallb_pods.resources[0].status.containerStatuses[0].ready
-      retries: 20
-      delay: 3
 
     # step 21
 
     - name: Add ingress-nginx Helm repository
-      kubernetes.core.helm_repository:
-        name: ingress-nginx
-        repo_url: https://kubernetes.github.io/ingress-nginx
+      ansible.builtin.command:
+        cmd: >
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          --force-update
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
 
-    - name: Install ingress-nginx via Helm
-      kubernetes.core.helm:
-        name: ingress-nginx
-        chart_ref: ingress-nginx/ingress-nginx
-        release_namespace: "{{ ingress_nginx_namespace }}"
-        create_namespace: true
-        values_files:
-          - /vagrant/k8s/ingress-nginx-values.yml
-        kubeconfig: "{{ kubeconfig_path }}"
-        wait: true
+    - name: Helm repo update
+      ansible.builtin.command:
+        cmd: helm repo update
+      environment:
+            KUBECONFIG: "{{ kubeconfig_path }}"

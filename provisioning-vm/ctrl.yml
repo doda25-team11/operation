@@ -3,17 +3,6 @@
   become: yes
   tasks:
 
-    #needed for finalization
-
-    - name: Install pip and Kubernetes client
-      ansible.builtin.apt:
-        name: python3-pip
-        state: present
-        update_cache: true
-
-    - name: Install Kubernetes python lib
-      ansible.builtin.pip:
-        name: kubernetes
 
     # Step 13
     - name: Check existence admin.conf
