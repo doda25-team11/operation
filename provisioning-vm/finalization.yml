@@ -75,3 +75,13 @@
         cmd: helm repo update
       environment:
             KUBECONFIG: "{{ kubeconfig_path }}"
+
+    - name: Install ingress-nginx via Helm
+      ansible.builtin.command:
+        cmd: >
+          helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx
+          --namespace {{ ingress_nginx_namespace }}
+          --create-namespace
+          --set controller.service.loadBalancerIP={{ ingress_nginx_ip }}
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
