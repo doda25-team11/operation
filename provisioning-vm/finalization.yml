@@ -85,3 +85,91 @@
           --set controller.service.loadBalancerIP={{ ingress_nginx_ip }}
       environment:
         KUBECONFIG: "{{ kubeconfig_path }}"
+
+    - name: Wait for ingress-nginx controller pod to be Ready
+      ansible.builtin.command:
+        cmd: >
+          kubectl wait --namespace {{ ingress_nginx_namespace }}
+          --for=condition=ready pod
+          --selector=app.kubernetes.io/component=controller
+          --timeout=180s
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+      register: ingress_wait
+      retries: 5
+      delay: 5
+      until: ingress_wait.rc == 0
+      changed_when: false
+
+
+    # step 22
+
+    - name: Add Kubernetes Dashboard Helm repo
+      kubernetes.core.helm_repository:
+        name: kubernetes-dashboard
+        repo_url: https://kubernetes.github.io/dashboard/
+
+    - name: Install Kubernetes Dashboard
+      kubernetes.core.helm:
+        name: k8s-dashboard
+        chart_ref: kubernetes-dashboard/kubernetes-dashboard
+        release_namespace: kubernetes-dashboard
+        create_namespace: true
+        #values:
+        #  protocolHttp: true
+        kubeconfig: "{{ kubeconfig_path }}"
+
+    - name: Apply Dashboard admin user and ClusterRoleBinding
+      ansible.builtin.command:
+        cmd: kubectl apply -f /vagrant/k8s/dashboard-admin.yml
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+
+    - name: Create/Update TLS secret for Dashboard HTTPS ingress
+      ansible.builtin.shell: |
+        kubectl create secret tls dashboard-tls \
+          --namespace kubernetes-dashboard \
+          --cert=/vagrant/k8s/tls/dashboard.local.crt \
+          --key=/vagrant/k8s/tls/dashboard.local.key \
+          --dry-run=client -o yaml | kubectl apply -f -
+      args:
+        executable: /bin/bash
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+
+
+    - name: Apply Dashboard Ingress
+      ansible.builtin.command:
+        cmd: kubectl apply -f /vagrant/k8s/dashboard-ingress.yml
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+
+    # step 23
+
+    - name: Download Istio archive
+      ansible.builtin.get_url:
+        url: https://github.com/istio/istio/releases/download/1.25.2/istio-1.25.2-linux-amd64.tar.gz
+        dest: /tmp/istio.tar.gz
+        mode: '0644'
+
+    - name: Extract Istio
+      ansible.builtin.unarchive:
+        src: /tmp/istio.tar.gz
+        dest: /home/vagrant/
+        remote_src: true
+      become_user: vagrant
+
+    - name: Add istioctl to PATH for vagrant user
+      ansible.builtin.lineinfile:
+        path: /home/vagrant/.bashrc
+        line: 'export PATH=$PATH:/home/vagrant/istio-1.25.2/bin'
+        state: present
+      become_user: vagrant
+
+    - name: Install Istio with custom LoadBalancer IP
+      ansible.builtin.shell: |
+        /home/vagrant/istio-1.25.2/bin/istioctl install -y -f /vagrant/istio/istio-config.yml
+      args:
+        executable: /bin/bash
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
