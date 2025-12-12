@@ -2,11 +2,26 @@
 - hosts: node-*
   become: yes
   tasks:
-    # Placeholder for now
+    - name: Wait for control plane to be network-reachable
+      wait_for:
+        host: 192.168.60.100
+        port: 22
+        timeout: 180
+        delay: 5
+      
     - name: Ensure worker logic can begin
       ansible.builtin.debug:
         msg: "Worker setup placeholder executed successfully."
 
+    # Wait for ctrl API server to be reachable
+    - name: Wait for control plane API server to be reachable
+      wait_for:
+        host: 192.168.60.100
+        port: 6443
+        timeout: 300
+        delay: 5
+      register: api_reachable
+      
     # Task 18
     - name: Generate join command on controller
       become: yes
