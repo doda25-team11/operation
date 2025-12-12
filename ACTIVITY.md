@@ -89,6 +89,11 @@ Still working on testing and merging A2's steps 20-21, made PR for A2's steps 22
 
 I made the monitoring metrics for A3 Prometheus. I used Figen's code for inspiration (https://github.com/doda25-team11/app/commits/A3.3-Metrics/). I explained the metrics in README in operation.
 
+- Figen:
+I worked on fixing the problems we had with A2 for the people using Oracle Virtualbox: https://github.com/doda25-team11/operation/pull/13
+I added prometheus as a dependency: https://github.com/doda25-team11/operation/pull/14
+I created the base for Arnas's code in App: https://github.com/doda25-team11/app/tree/A3.3-Metrics 
+
 ### Week Q1.6 (Dec 15+)
 ### Week Q1.7 (Jan 5+)
 ### Week Q1.8 (Jan 12+)
