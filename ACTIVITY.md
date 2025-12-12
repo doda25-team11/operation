@@ -85,6 +85,10 @@ I have worked on steps 18 and 19 of A2. I have assigned myself step 3 of A3. I a
 
 Still working on testing and merging A2's steps 20-21, made PR for A2's steps 22-23 and starting to work on A3
 
+- Arnas: https://github.com/doda25-team11/app/pull/4
+
+I made the monitoring metrics for A3 Prometheus. I used Figen's code for inspiration (https://github.com/doda25-team11/app/commits/A3.3-Metrics/). I explained the metrics in README in operation.
+
 ### Week Q1.6 (Dec 15+)
 ### Week Q1.7 (Jan 5+)
 ### Week Q1.8 (Jan 12+)
