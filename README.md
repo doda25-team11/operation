@@ -157,6 +157,37 @@ kubectl port-forward svc/test-release-sms-checker-app 8080:80
 kubectl port-forward svc/test-release-sms-checker-model 8081:80
 ```
 
+## Istio Traffic Management & Canary Release
+
+This project uses **Istio** to expose the SMS Checker app via the Istio IngressGateway and to run a **canary release** with sticky sessions.
+
+### Prerequisites
+
+- Kubernetes cluster with Istio installed (and your computer pointing to this cluster)
+- Istio IngressGateway is deployed and labeled. By default we expect:
+
+  ```yaml
+  istio.ingressGateway.selectorLabels:
+    istio: ingressgateway
+  ```
+After the helm installation as described above (with the ghcr-credentials part), you should be able to run 
+```bash
+kubectl get svc -n istio-system istio-ingressgateway
+```
+This should return an entry that contains an EXTERNAL-IP. You should now be able to curl that ip.
+```bash
+curl -H "Host: sms.local" http://192.168.56.91
+```
+To run with either control or canary versions, add the header "x-doda-exp: control" or "x-doda-exp: canary" 
+```bash
+curl -s \
+    -H "Host: sms.local" \
+    -H "x-doda-exp: control" \
+    -H "Content-Type: application/json" \
+    -d '{"sms": "win money FREE!!!"}' \
+    http://192.168.56.91/sms
+```
+
 ***
 
 ### App 
