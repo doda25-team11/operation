@@ -176,7 +176,7 @@ kubectl get svc -n istio-system istio-ingressgateway
 ```
 This should return an entry that contains an EXTERNAL-IP. You should now be able to curl that ip.
 ```bash
-curl -H "Host: sms.local" http://192.168.56.91
+curl -H "Host: sms.local" http://<EXTERNAL-IP>
 ```
 To run with either control or canary versions, add the header "x-doda-exp: control" or "x-doda-exp: canary" 
 ```bash
@@ -185,7 +185,7 @@ curl -s \
     -H "x-doda-exp: control" \
     -H "Content-Type: application/json" \
     -d '{"sms": "win money FREE!!!"}' \
-    http://192.168.56.91/sms
+    http://<EXTERNAL-IP>/sms
 ```
 
 ***
