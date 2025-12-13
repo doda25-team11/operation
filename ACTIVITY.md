@@ -79,6 +79,9 @@ I didn't create any new PR's. I finalized step 13-17 (see week 3) and spent time
 
 Still working on testing and merging A2's steps 20-21, made PR for A2's steps 22-23 and starting to work on A3
 
+- Rodrigo: https://github.com/doda25-team11/operation/pull/15, https://github.com/doda25-team11/operation/pull/11
+Worked on the traffic management + canary release of A4. Reviewed and collaborated on steps 20-23 of A2 since it needed fixing.
+
 ### Week Q1.6 (Dec 15+)
 ### Week Q1.7 (Jan 5+)
 ### Week Q1.8 (Jan 12+)
