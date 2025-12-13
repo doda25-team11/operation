@@ -1,0 +1,48 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "sms-checker.fullname" . }}-app-vs
+  labels:
+    app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "istio"
+spec:
+  hosts:
+    - {{ .Values.istio.hosts.app | quote }}
+  gateways:
+    - {{ include "sms-checker.fullname" . }}-gateway
+  http:
+    # 1) Sticky: force CANARY (v2) for users with header x-doda-exp: canary
+    - match:
+        - headers:
+            {{ .Values.istio.stickyHeader }}:
+              exact: "canary"
+      route:
+        - destination:
+            host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
+            subset: v2
+          weight: 100
+
+    # 2) Sticky: force STABLE (v1) for users with header x-doda-exp: control
+    - match:
+        - headers:
+            {{ .Values.istio.stickyHeader }}:
+              exact: "control"
+      route:
+        - destination:
+            host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
+            subset: v1
+          weight: 100
+
+    # 3) Default: 90/10 split for users without sticky header
+    - route:
+        - destination:
+            host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
+            subset: v1
+          weight: {{ .Values.istio.trafficSplit.stableWeight }}
+        - destination:
+            host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
+            subset: v2
+          weight: {{ .Values.istio.trafficSplit.canaryWeight }}
+{{- end }}

@@ -1,0 +1,31 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "sms-checker.fullname" . }}-model-vs
+  labels:
+    app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "istio"
+spec:
+  hosts:
+    - {{ include "sms-checker.fullname" . }}-model.{{ .Release.Namespace }}.svc.cluster.local
+  http:
+    - match:
+        - sourceLabels:
+            app.kubernetes.io/name: "{{ include "sms-checker.fullname" . }}-app"
+            version: v1
+      route:
+        - destination:
+            host: {{ include "sms-checker.fullname" . }}-model.{{ .Release.Namespace }}.svc.cluster.local
+            subset: v1
+
+    - match:
+        - sourceLabels:
+            app.kubernetes.io/name: "{{ include "sms-checker.fullname" . }}-app"
+            version: v2
+      route:
+        - destination:
+            host: {{ include "sms-checker.fullname" . }}-model.{{ .Release.Namespace }}.svc.cluster.local
+            subset: v2
+{{- end }}

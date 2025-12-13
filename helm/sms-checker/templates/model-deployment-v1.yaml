@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sms-checker.fullname" . }}-model-v1
+  labels:
+    app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "model"
+    version: v1
+spec:
+  replicas: {{ .Values.modelService.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "model"
+      version: v1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "model"
+        version: v1
+    spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.imagePullSecrets }}
+        - name: {{ .name }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: model-service
+          image: "{{ .Values.modelService.image.repository }}:{{ .Values.modelService.image.tagStable }}"
+          imagePullPolicy: Always
+          env:
+            - name: MODEL_VERSION_TAG
+              value: "{{ .Values.modelService.modelVersionTag }}"
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
