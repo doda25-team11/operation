@@ -5,13 +5,13 @@ Vagrant.configure("2") do |config|
   
   # cofiguration variables 
   WORKER_COUNT = 2      # number of worker nodes to provision
-  BASE_IP = "192.168.56." # base IP 
+  BASE_IP = "192.168.60." # base IP
 
   # node resources based on step 1 specifications
   CTRL_MEM = 4096 # 4+ GB memory for control Node
   CTRL_CPUS = 2   # 1 core for control Node
   NODE_MEM = 6144 # 6+ GB memory for worker Node 
-  NODE_CPUS = 2   # 2 cores for worker Node
+  NODE_CPUS = 4   # 2 cores for worker Node
 
   config.vm.box = "bento/ubuntu-24.04"
 

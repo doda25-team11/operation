@@ -5,11 +5,11 @@
   vars:
     kubeconfig_path: /etc/kubernetes/admin.conf
     metallb_namespace: metallb-system
-    metallb_ip_range: 192.168.56.90-192.168.56.99
+    metallb_ip_range: 192.168.60.90-192.168.60.99
     ingress_nginx_namespace: ingress-nginx
-    ingress_nginx_ip: 192.168.56.90
+    ingress_nginx_ip: 192.168.60.90
     dashboard_namespace: kubernetes-dashboard
-    istio_lb_ip: 192.168.56.91
+    istio_lb_ip: 192.168.60.91
 
   tasks:
     - name: Wait for Kubernetes API to be reachable

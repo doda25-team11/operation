@@ -11,7 +11,7 @@
       register: kubeconfig
 
     - name: Initialize cluster
-      ansible.builtin.command: kubeadm init --apiserver-advertise-address=192.168.56.100 --node-name=ctrl --pod-network-cidr=10.244.0.0/16
+      ansible.builtin.command: kubeadm init --apiserver-advertise-address=192.168.60.100 --node-name=ctrl --pod-network-cidr=10.244.0.0/16
       when: not kubeconfig.stat.exists
 
     # Step 14
@@ -78,7 +78,7 @@
 
     - name: Wait for the API server
       wait_for:
-        host: 192.168.56.100
+        host: 192.168.60.100
         port: 6443
         timeout: 300
         delay: 5
