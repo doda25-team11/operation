@@ -85,6 +85,9 @@ I have worked on steps 18 and 19 of A2. I have assigned myself step 3 of A3. I a
 
 Still working on testing and merging A2's steps 20-21, made PR for A2's steps 22-23 and starting to work on A3
 
+- Rodrigo: https://github.com/doda25-team11/operation/pull/15, https://github.com/doda25-team11/operation/pull/11
+Worked on the traffic management + canary release of A4. Reviewed and collaborated on steps 20-23 of A2 since it needed fixing.
+
 - Arnas: https://github.com/doda25-team11/app/pull/4
 
 I made the monitoring metrics for A3 Prometheus. I used Figen's code for inspiration (https://github.com/doda25-team11/app/commits/A3.3-Metrics/). I explained the metrics in README in operation.
