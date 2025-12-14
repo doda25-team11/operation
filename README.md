@@ -88,7 +88,7 @@ vagrant status
 
 SSH into the controller, there are two ways. If your SSH keys work you can do this:
 ```bash
-ssh vagrant@192.168.56.100
+ssh vagrant@192.168.60.100
 ```
 otherwise you can ssh into a VM doing:
 ```bash
@@ -187,6 +187,12 @@ curl -s \
     -d '{"sms": "win money FREE!!!"}' \
     http://<EXTERNAL-IP>/sms
 ```
+**Troubleshooting**
+Some problems I encountered
+- If the status of your pods are ImagePullBackOff, you probably didn't set your credentials. Do so and restart/delete your pods
+- Make sure "kubectl config current-context" returns a kuberenetes entry (not minikube like in-class)
+- Make sure the kubeconfig file is up to date
+
 
 ***
 
