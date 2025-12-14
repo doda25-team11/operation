@@ -196,6 +196,31 @@ Some problems I encountered
 
 ***
 
+### Monitoring
+
+## Usability metrics (Prometheus)
+
+### `sms_checker_actions_total{action, result, channel}` (Counter)
+Counts user-facing actions in the app and their outcomes.  
+Use it to understand **how users interact** with the system (e.g., how often they classify) and how often interactions **fail**.  
+- `result`: outcome (`started`, `ok`, `error`)  
+
+### `sms_checker_classify_latency_seconds{channel, model_version}` (Histogram)
+Records the **end-to-end time** spent classifying a message (per request) and exposes bucketed latency for percentiles (p50/p95/p99).  
+Use it to reason about **responsiveness** and whether users experience the system as “fast enough”.  
+- `model_version`: deployed model version/tag (e.g., `current`)
+
+### `sms_checker_in_flight_requests{component}` (Gauge)
+Shows the **current number of ongoing classification requests** at scrape time (concurrency).  
+Use it to detect spikes in simultaneous usage and correlate load with latency (potential usability degradation under load).  
+
+### `sms_checker_active_sessions{channel}` (Gauge)
+Approximate number of active user sessions (or active usage windows) at the moment.  
+Use it as a proxy for **live engagement** and to detect drop-offs after changes/releases.  
+
+
+To access the streams, refer to the http://localhost:8080/actuator/prometheus.
+
 ### App 
 
 This component defines the Java application and its build process:

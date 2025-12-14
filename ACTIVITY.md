@@ -14,7 +14,7 @@ I have worked on A1's F9 and F10. Add a workflow to train the ML model, and remo
 
 I worked on versioning and deployment of the lib-version. All commits there are mine this week. I worked on F1, F2 and F11.
 
-- Figen: https://github.com/doda25-team11/operation/1
+- Figen: https://github.com/doda25-team11/operation/pull/1
 
 I have worked on A1's F7, writing the docker-compose file to onfiguring services, environment variables, networking, volume mapping.
 
@@ -32,9 +32,9 @@ NOTE: I helped Amy with F6 and tested the code with her.
 
 ### Week Q1.3 (Nov 24+)
 
-- Arnas: https://github.com/doda25-team11/operation/pull/10
+- Arnas:
 
-I have worked on steps 18 and 19. I have helped wih 16 and 17 of A2.
+This week, not much was happening on my part.
 
 - Bill: https://github.com/doda25-team11/operation/pull/4 & https://github.com/doda25-team11/operation/pull/5 & https://github.com/doda25-team11/operation/pull/2
 
@@ -50,7 +50,7 @@ I worked on step 13-17. There were some troubles with copying the admin file to 
 - Rodrigo: https://github.com/doda25-team11/operation/pull/3
 I worked on steps 4-8 and reviewed steps 1-3. I also worked on fixing F10 because it still used 'latest' (although this PR was merged in Week 4)
 
-- Figen: https://github.com/doda25-team11/operation/1
+- Figen: https://github.com/doda25-team11/operation/pull/2
 Created VMs for bothworker and control and using ansible
 
 - Radu
@@ -73,6 +73,12 @@ I implemented the helm chart and part of the migration. I code reviewed PRs rela
 - Amy
 I didn't create any new PR's. I finalized step 13-17 (see week 3) and spent time on making the In-class exercises work on my own laptop.
 
+- Figen
+I did not make any PR's. I spent my time on making the in-class exercises and started with A3, but have not made much progress yet.
+
+- Arnas https://github.com/doda25-team11/operation/pull/10
+I have worked on steps 18 and 19 of A2. I have assigned myself step 3 of A3. I also fixed some bugs. I have helped wih 16 and 17 of A2.
+
 ### Week Q1.5 (Dec 8+)
 
 - Radu: https://github.com/doda25-team11/operation/pull/11, https://github.com/doda25-team11/operation/pull/12
@@ -81,6 +87,15 @@ Still working on testing and merging A2's steps 20-21, made PR for A2's steps 22
 
 - Rodrigo: https://github.com/doda25-team11/operation/pull/15, https://github.com/doda25-team11/operation/pull/11
 Worked on the traffic management + canary release of A4. Reviewed and collaborated on steps 20-23 of A2 since it needed fixing.
+
+- Arnas: https://github.com/doda25-team11/app/pull/4
+
+I made the monitoring metrics for A3 Prometheus. I used Figen's code for inspiration (https://github.com/doda25-team11/app/commits/A3.3-Metrics/). I explained the metrics in README in operation.
+
+- Figen:
+I worked on fixing the problems we had with A2 for the people using Oracle Virtualbox: https://github.com/doda25-team11/operation/pull/13
+I added prometheus as a dependency: https://github.com/doda25-team11/operation/pull/14
+I created the base for Arnas's code in App: https://github.com/doda25-team11/app/tree/A3.3-Metrics 
 
 ### Week Q1.6 (Dec 15+)
 ### Week Q1.7 (Jan 5+)

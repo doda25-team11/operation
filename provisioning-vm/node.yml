@@ -8,7 +8,7 @@
         port: 22
         timeout: 180
         delay: 5
-
+      
     - name: Ensure worker logic can begin
       ansible.builtin.debug:
         msg: "Worker setup placeholder executed successfully."
@@ -21,7 +21,7 @@
         timeout: 300
         delay: 5
       register: api_reachable
-
+      
     # Task 18
     - name: Generate join command on controller
       become: yes
