@@ -95,7 +95,10 @@ I made the monitoring metrics for A3 Prometheus. I used Figen's code for inspira
 - Figen:
 I worked on fixing the problems we had with A2 for the people using Oracle Virtualbox: https://github.com/doda25-team11/operation/pull/13
 I added prometheus as a dependency: https://github.com/doda25-team11/operation/pull/14
-I created the base for Arnas's code in App: https://github.com/doda25-team11/app/tree/A3.3-Metrics 
+I created the base for Arnas's code in App: https://github.com/doda25-team11/app/tree/A3.3-Metrics
+
+- Amy
+I worked on trying to fix the problem of joining the Kubernetes clusters in A2 (in https://github.com/doda25-team11/operation/pull/13). Not all team members had this issue as the bug was only there for VirtualBox users. I reviewed https://github.com/doda25-team11/operation/pull/15 and started with A4 - Continuous experimentation (https://github.com/doda25-team11/operation/pull/16).
 
 ### Week Q1.6 (Dec 15+)
 ### Week Q1.7 (Jan 5+)
