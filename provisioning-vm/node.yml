@@ -2,11 +2,6 @@
 - hosts: all 
   become: yes
   tasks:
-    # Placeholder for now
-    - name: Ensure worker logic can begin
-      ansible.builtin.debug:
-        msg: "Worker setup placeholder executed successfully."
-
     # Task 18
     - name: Generate join command on controller
       become: yes

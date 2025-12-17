@@ -60,6 +60,10 @@ I implemented steps 16 and 17 of assignment 2 still.
 I code reviewed: https://github.com/doda25-team11/operation/pull/7
 
 ### Week Q1.5 (Dec 8+)
+- Bill: https://github.com/doda25-team11/operation/pull/13 
+I helped Figen with checking and fixing the worker nodes not joining the cluster and we decided together that the fix is to use another IP. There were
+other fixes possible like pinging the worker node but I decided to not implement this solution and we decided to go with Figen's commit in the PR.
+
 ### Week Q1.6 (Dec 15+)
 ### Week Q1.7 (Jan 5+)
 ### Week Q1.8 (Jan 12+)
