@@ -5,12 +5,16 @@ app:
   image:
     repository: "ghcr.io/doda25-team11/app"
     tag: "0.latest"
+    tagStable: "0.latest"
+    tagCanary: "0.latest"
   replicaCount: 1
 
 modelService:
   image:
     repository: "ghcr.io/doda25-team11/model-service"
     tag: "latest"
+    tagStable: "latest"
+    tagCanary: "latest"
   replicaCount: 1
 
   servicePort: 80
@@ -26,5 +30,22 @@ ingress:
   host: "sms-checker.local"  # placeholder, will be overridden per cluster
   annotations: {}
 
+# Istio traffic management config
+istio:
+  enabled: true
+  ingressGateway:
+    selectorLabels:
+      istio: ingressgateway
+
+  # Hostname that users will use for the app (configure /etc/hosts to point it to the IngressGateway IP)
+  hosts:
+    app: sms.local
+
+  trafficSplit:
+    stableWeight: 90
+    canaryWeight: 10
+
+  # Sticky session header – used to force users into v1 or v2
+  stickyHeader: x-doda-exp
 
 # Add here stuff like prometheus and grafana later

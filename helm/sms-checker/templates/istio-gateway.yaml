@@ -1,0 +1,22 @@
+{{- if .Values.istio.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ include "sms-checker.fullname" . }}-gateway
+  labels:
+    app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "istio"
+spec:
+  selector:
+    {{- range $k, $v := .Values.istio.ingressGateway.selectorLabels }}
+    {{ $k }}: {{ $v | quote }}
+    {{- end }}
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - {{ .Values.istio.hosts.app | quote }}
+{{- end }}

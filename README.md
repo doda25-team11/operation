@@ -88,7 +88,7 @@ vagrant status
 
 SSH into the controller, there are two ways. If your SSH keys work you can do this:
 ```bash
-ssh vagrant@192.168.56.100
+ssh vagrant@192.168.60.100
 ```
 otherwise you can ssh into a VM doing:
 ```bash
@@ -157,7 +157,69 @@ kubectl port-forward svc/test-release-sms-checker-app 8080:80
 kubectl port-forward svc/test-release-sms-checker-model 8081:80
 ```
 
+## Istio Traffic Management & Canary Release
+
+This project uses **Istio** to expose the SMS Checker app via the Istio IngressGateway and to run a **canary release** with sticky sessions.
+
+### Prerequisites
+
+- Kubernetes cluster with Istio installed (and your computer pointing to this cluster)
+- Istio IngressGateway is deployed and labeled. By default we expect:
+
+  ```yaml
+  istio.ingressGateway.selectorLabels:
+    istio: ingressgateway
+  ```
+After the helm installation as described above (with the ghcr-credentials part), you should be able to run 
+```bash
+kubectl get svc -n istio-system istio-ingressgateway
+```
+This should return an entry that contains an EXTERNAL-IP. You should now be able to curl that ip.
+```bash
+curl -H "Host: sms.local" http://<EXTERNAL-IP>
+```
+To run with either control or canary versions, add the header "x-doda-exp: control" or "x-doda-exp: canary" 
+```bash
+curl -s \
+    -H "Host: sms.local" \
+    -H "x-doda-exp: control" \
+    -H "Content-Type: application/json" \
+    -d '{"sms": "win money FREE!!!"}' \
+    http://<EXTERNAL-IP>/sms
+```
+**Troubleshooting**
+Some problems I encountered
+- If the status of your pods are ImagePullBackOff, you probably didn't set your credentials. Do so and restart/delete your pods
+- Make sure "kubectl config current-context" returns a kuberenetes entry (not minikube like in-class)
+- Make sure the kubeconfig file is up to date
+
+
 ***
+
+### Monitoring
+
+## Usability metrics (Prometheus)
+
+### `sms_checker_actions_total{action, result, channel}` (Counter)
+Counts user-facing actions in the app and their outcomes.  
+Use it to understand **how users interact** with the system (e.g., how often they classify) and how often interactions **fail**.  
+- `result`: outcome (`started`, `ok`, `error`)  
+
+### `sms_checker_classify_latency_seconds{channel, model_version}` (Histogram)
+Records the **end-to-end time** spent classifying a message (per request) and exposes bucketed latency for percentiles (p50/p95/p99).  
+Use it to reason about **responsiveness** and whether users experience the system as “fast enough”.  
+- `model_version`: deployed model version/tag (e.g., `current`)
+
+### `sms_checker_in_flight_requests{component}` (Gauge)
+Shows the **current number of ongoing classification requests** at scrape time (concurrency).  
+Use it to detect spikes in simultaneous usage and correlate load with latency (potential usability degradation under load).  
+
+### `sms_checker_active_sessions{channel}` (Gauge)
+Approximate number of active user sessions (or active usage windows) at the moment.  
+Use it as a proxy for **live engagement** and to detect drop-offs after changes/releases.  
+
+
+To access the streams, refer to the http://localhost:8080/actuator/prometheus.
 
 ### App 
 
