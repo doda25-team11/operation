@@ -80,6 +80,9 @@ I did not make any PR's. I spent my time on making the in-class exercises and st
 I have worked on steps 18 and 19 of A2. I have assigned myself step 3 of A3. I also fixed some bugs. I have helped wih 16 and 17 of A2.
 
 ### Week Q1.5 (Dec 8+)
+- Bill: https://github.com/doda25-team11/operation/pull/13 
+I helped Figen with checking and fixing the worker nodes not joining the cluster and we decided together that the fix is to use another IP. There were
+other fixes possible like pinging the worker node but I decided to not implement this solution and we decided to go with Figen's commit in the PR.
 
 - Radu: https://github.com/doda25-team11/operation/pull/11, https://github.com/doda25-team11/operation/pull/12
 
