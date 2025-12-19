@@ -104,6 +104,8 @@ I created the base for Arnas's code in App: https://github.com/doda25-team11/app
 I worked on trying to fix the problem of joining the Kubernetes clusters in A2 (in https://github.com/doda25-team11/operation/pull/13). Not all team members had this issue as the bug was only there for VirtualBox users. I reviewed https://github.com/doda25-team11/operation/pull/15 and started with A4 - Continuous experimentation (https://github.com/doda25-team11/operation/pull/16).
 
 ### Week Q1.6 (Dec 15+)
+- Bill: https://github.com/doda25-team11/operation/pull/17
+I updated readme to make it more clear for the next feedback round.
 ### Week Q1.7 (Jan 5+)
 ### Week Q1.8 (Jan 12+)
 ### Week Q1.9 (Jan 19+)
