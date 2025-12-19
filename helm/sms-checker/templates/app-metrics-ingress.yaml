@@ -1,0 +1,31 @@
+{{- if .Values.metricsIngress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "sms-checker.fullname" . }}-metrics
+  labels:
+    app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "app"
+  {{- if .Values.metricsIngress.annotations }}
+  annotations:
+    {{- range $key, $value := .Values.metricsIngress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+spec:
+  {{- if .Values.metricsIngress.className }}
+  ingressClassName: {{ .Values.metricsIngress.className | quote }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.metricsIngress.host | quote }}
+      http:
+        paths:
+          - path: /metrics
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "sms-checker.fullname" . }}-app
+                port:
+                  number: 80
+{{- end }}

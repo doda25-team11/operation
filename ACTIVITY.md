@@ -104,8 +104,9 @@ I created the base for Arnas's code in App: https://github.com/doda25-team11/app
 I worked on trying to fix the problem of joining the Kubernetes clusters in A2 (in https://github.com/doda25-team11/operation/pull/13). Not all team members had this issue as the bug was only there for VirtualBox users. I reviewed https://github.com/doda25-team11/operation/pull/15 and started with A4 - Continuous experimentation (https://github.com/doda25-team11/operation/pull/16).
 
 ### Week Q1.6 (Dec 15+)
-- Bill: https://github.com/doda25-team11/operation/pull/17
-I updated readme to make it more clear for the next feedback round.
+- Bill: https://github.com/doda25-team11/operation/pull/17 & https://github.com/doda25-team11/operation/pull/18
+I updated readme to make it more clear for the next feedback round. I also added a service monitor for prometheus and make the metrics endpoint at /metrics.
+
 - Figen: https://github.com/doda25-team11/operation/pull/19
 I added the shadow launch as an additional use case and reviewed https://github.com/doda25-team11/operation/pull/18. 
 ### Week Q1.7 (Jan 5+)

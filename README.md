@@ -213,8 +213,7 @@ Use it to detect spikes in simultaneous usage and correlate load with latency (p
 Approximate number of active user sessions (or active usage windows) at the moment.  
 Use it as a proxy for **live engagement** and to detect drop-offs after changes/releases.  
 
-
-To access the streams, refer to the http://localhost:8080/actuator/prometheus.
+To access the streams, refer to the http://sms.local/metrics.
 
 ### App 
 
