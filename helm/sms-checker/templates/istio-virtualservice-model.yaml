@@ -28,4 +28,15 @@ spec:
         - destination:
             host: {{ include "sms-checker.fullname" . }}-model.{{ .Release.Namespace }}.svc.cluster.local
             subset: v2
+
+    - route:
+        - destination:
+            host: {{ include "sms-checker.fullname" . }}-model.{{ .Release.Namespace }}.svc.cluster.local
+            subset: v1
+          weight: 100
+      mirror:
+        host: {{ include "sms-checker.fullname" . }}-model.{{ .Release.Namespace }}.svc.cluster.local
+        subset: v2
+      mirrorPercentage:
+        value: 100.0
 {{- end }}
