@@ -102,13 +102,17 @@ vagrant destroy -f
 
 ### Helm Installation
 
-**Note:** Before running the Helm commands, make sure your Kubernetes cluster is reachable with `kubectl`. For example:
+**Note:** Before running the Helm commands, make sure your Kubernetes cluster is reachable with `kubectl` (from host). For example:
 ```bash
 kubectl config current-context
 kubectl get nodes
 ```
 This should list a context (e.g `minikube`) and at least one node (e.g. `minikube` or `ctrl`).
 
+If this returns a `current-context is not set` error, then add the `admin.conf` (located at `/provisioning-vm/.vagrant/`) as `KUBECONFIG` variable in the host
+```bash
+export KUBECONFIG=/<Path to repo>/operation/provisioning-vm/.vagrant/admin.conf
+```
 
 Install Helm 3 (follow the official docs for your OS).
 Ex:
@@ -121,7 +125,6 @@ Make sure you are in …/helm/sms-checker
 cd helm/sms-checker
 ```
 
-
 Check the chart
 ```bash
 helm lint .
@@ -132,14 +135,6 @@ Install / upgrade the release after changes
 ```bash
 helm install test-release .
 helm upgrade test-release .
-```
-To create a secret to be able to pull the latest images from the github repository 
-This does not store your info in any public place
-```bash
-kubectl create secret docker-registry ghcr-credentials \
-  --docker-server=ghcr.io \
-  --docker-username=YOUR_GITHUB_USERNAME \
-  --docker-password='YOUR_GHCR_PAT'
 ```
 
 To run with ingress (or set the variable to true in values.yaml)
