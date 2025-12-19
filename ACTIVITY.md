@@ -108,7 +108,10 @@ I worked on trying to fix the problem of joining the Kubernetes clusters in A2 (
 I updated readme to make it more clear for the next feedback round. I also added a service monitor for prometheus and make the metrics endpoint at /metrics.
 
 - Figen: https://github.com/doda25-team11/operation/pull/19
-I added the shadow launch as an additional use case and reviewed https://github.com/doda25-team11/operation/pull/18. 
+I added the shadow launch as an additional use case and reviewed https://github.com/doda25-team11/operation/pull/18.
+
+- Arnas: https://github.com/doda25-team11/operation/tree/rate-limiter
+I was working on additional use case, that is traffic limiter as well as reviewing peers.
 ### Week Q1.7 (Jan 5+)
 ### Week Q1.8 (Jan 12+)
 ### Week Q1.9 (Jan 19+)
