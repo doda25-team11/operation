@@ -116,6 +116,9 @@ I was working on additional use case, that is traffic limiter as well as reviewi
 - Rodrigo: https://github.com/doda25-team11/operation/pull/15
 Analysed all the feedback + reviewed features left for reaching highest points in rubric. Worked on making a troubleshooting md. Merged the traffic management content.
 
+- Amy: https://github.com/doda25-team11/operation/pull/20
+I worked on setting up the Grafana dashboards.
+
 ### Week Q1.7 (Jan 5+)
 ### Week Q1.8 (Jan 12+)
 ### Week Q1.9 (Jan 19+)
