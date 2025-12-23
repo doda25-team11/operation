@@ -49,6 +49,10 @@ istio:
   stickyHeader: x-doda-exp
 
 # Add here stuff like prometheus and grafana later
+grafana:
+  sidecar:
+    dashboards:
+      enabled: true
 
 # Prometheus metrics ingress
 metricsIngress:

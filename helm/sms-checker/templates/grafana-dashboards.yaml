@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sms-checker-grafana-dashboards
+  labels:
+    grafana_dashboard: "1"
+data:
+  sms-checker-usability.json: |
+{{ .Files.Get "grafana/dashboards/Dashboard-1.json" | indent 4 }}
+
+  sms-checker-decision-support.json: |
+{{ .Files.Get "grafana/dashboards/Dashboard-2.json" | indent 4 }}

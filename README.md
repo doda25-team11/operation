@@ -215,6 +215,27 @@ Use it as a proxy for **live engagement** and to detect drop-offs after changes/
 
 To access the streams, refer to the http://sms.local/metrics.
 
+### Access Grafana
+To access the Grafana dashboards, make sure you ran
+```bash
+helm upgrade test-release .
+```
+
+Then port-forward the svc using
+```bash
+kubectl port-forward svc/test-release-grafana 3000:80
+```
+
+Now you can see the Grafana dashboards in localhost:3000. 
+
+You can use 'admin' as username, and the outcome of
+
+```bash
+kubectl get secret test-release-grafana   -o jsonpath="{.data.admin-password}" | base64 --decode
+```
+
+as password.
+
 ### App 
 
 This component defines the Java application and its build process:
