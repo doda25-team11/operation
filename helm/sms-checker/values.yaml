@@ -49,3 +49,10 @@ istio:
   stickyHeader: x-doda-exp
 
 # Add here stuff like prometheus and grafana later
+
+# Prometheus metrics ingress
+metricsIngress:
+  enabled: true
+  host: sms.local
+  className: nginx
+  annotations: {}

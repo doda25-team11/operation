@@ -1,2 +1,4 @@
 .vagrant/
 admin.conf
+Chart.lock
+charts/
