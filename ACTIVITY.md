@@ -120,6 +120,7 @@ Analysed all the feedback + reviewed features left for reaching highest points i
 I worked on setting up the Grafana dashboards.
 
 ### Week Q1.7 (Jan 5+)
+- Bill: https://github.com/doda25-team11/operation/pull/23
 ### Week Q1.8 (Jan 12+)
 ### Week Q1.9 (Jan 19+)
 
