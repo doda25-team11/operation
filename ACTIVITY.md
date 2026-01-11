@@ -120,6 +120,10 @@ Analysed all the feedback + reviewed features left for reaching highest points i
 I worked on setting up the Grafana dashboards.
 
 ### Week Q1.7 (Jan 5+)
+
+- Rodrigo: https://github.com/doda25-team11/operation/pull/22
+Worked on the deployment documentation markdown file + started thinking/planning on the presentation.
+
 - Amy: https://github.com/doda25-team11/operation/pull/24
 I worked on checking the rubrics and improving assignment 2.
 - Figen: https://github.com/doda25-team11/lib-version/pull/2
