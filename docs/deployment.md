@@ -153,6 +153,71 @@ users are described in the **Data Flow** section.
 
 ## Data Flow
 
+This section explains, at a high level, how requests move through the system and where dynamic routing decisions
+are taken for the canary release and sticky sessions.
+
+### 3.1 External request flow (client → app)
+
+From a client’s perspective, every request goes to the same public entrypoint:
+
+1. The client sends an HTTP request to the cluster via the **Istio IngressGateway** (host `sms.local`, port `80`).
+2. The **Gateway** (`test-release-sms-checker-gateway`) matches this traffic for `sms.local` and passes it to the
+   **app VirtualService** (`test-release-sms-checker-app-vs`).
+3. The VirtualService forwards the request to the Kubernetes Service
+   `test-release-sms-checker-app`, which then routes it to one of the app pods (v1 or v2).
+4. The selected app pod:
+   - serves `GET /` for a basic landing/health response, or
+   - handles `POST /sms` and calls the model-service to obtain a prediction.
+
+At this level, the important point is that **all external traffic** enters through the IngressGateway and is then
+handed off to the app Service via Istio’s routing rules.
+
+### 3.2 Experiment routing and sticky sessions (v1 vs v2)
+
+The canary release and sticky sessions are implemented in the **app VirtualService**. Conceptually, it decides
+**which version of the app** should handle each incoming request:
+
+- Requests with header `x-doda-exp: control` are always routed to the **stable version (v1)**.
+- Requests with header `x-doda-exp: canary` are always routed to the **canary version (v2)**.
+- Requests **without** this header are split between v1 and v2 using a **weighted canary rollout**
+  (e.g. around 90% to v1 and 10% to v2).
+
+These rules map to logical “subsets” of the app behind the Service, defined in the app **DestinationRule**. This is
+the main **dynamic routing decision point** for external traffic:
+
+- It implements the global 90/10 canary split.
+- It provides sticky behaviour for “control” and “canary” users based on a dedicated header.
+
+### 3.3 App → model flow and consistent pairing
+
+When the app needs a prediction, it calls the model-service through its Kubernetes Service
+`test-release-sms-checker-model`. This internal call is also routed by Istio:
+
+1. The request from the app pod goes to the model Service and is intercepted by the **model VirtualService**
+   (`test-release-sms-checker-model-vs`).
+2. The VirtualService uses information about the **calling app pod** (in particular its `version` label) and selects
+   the matching subset of the model, defined in the model **DestinationRule**.
+
+As a result:
+
+- app v1 calls **model v1**,
+- app v2 calls **model v2**,
+
+so that each user consistently sees either the old pair (app+model v1) or the new pair (app+model v2). This is the
+second **dynamic routing decision point**, ensuring consistency between the two services.
+
+### 3.4 Overview
+
+Putting it together, a typical request flows as:
+
+> client → IngressGateway → Gateway → app VirtualService → app Service → app pod (v1 or v2)  
+> → model VirtualService → model Service → model pod (v1 or v2) → back to client
+
+The diagrams in this document show how these components are connected and where the two routing decisions
+(90/10 split and app/model pairing) are applied.
+
+
+
 
 ## Monitoring
 
