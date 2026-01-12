@@ -4,6 +4,7 @@ Stuff left to do in this file:
 - Images -> I think there should be an image for each section: 2, 3, and 4
 - Full readthrough that checks everything is correct, especially ports/links/commands/names/etc
 - Some sections have not been fully done yet
+- If you want to edit the images this is the link: https://drive.google.com/file/d/19sDs0Tn1onYtKaKgtMy1HRXwKfIKbewS/view?usp=sharing
 
 ## Table of Contents
 - [Overview](#overview)
@@ -152,12 +153,12 @@ Istio adds a service-mesh layer on top of the Kubernetes deployment. Structurall
       app and model Services based on the `version` label.
 
 The details of how these resources implement the 90/10 canary split and sticky sessions for “control” and “canary”
-users are described in the **Data Flow** section.
+users are described in the **Data Flow** section. In combination, the Gateway, VirtualServices and DestinationRules define 
+how external traffic for sms.local is admitted through the IngressGateway and then split between the v1/v2 subsets of 
+the app and model Services.
 
 ## Data Flow
 
-This section explains, at a high level, how requests move through the system and where dynamic routing decisions
-are taken for the canary release and sticky sessions.
 
 ### 3.1 External request flow (client → app)
 
@@ -224,7 +225,21 @@ The diagrams in this document show how these components are connected and where 
 
 ## Monitoring
 
-![Monitoring](docs/images/monitoring.png) 
+The monitoring stack is deployed in the cluster alongside the SMS Checker and is used to support
+continuous experimentation.
+
+**TODO** Check this because I've made it up.
+
+- **Prometheus** periodically scrapes application metrics from the app pods (v1 and v2). These metrics
+  include HTTP request counts and latency, which are used to compare the behaviour of the stable and
+  canary versions during experiments.
+- **Grafana** connects to Prometheus as a data source and provides dashboards that visualise these
+  metrics (e.g. request rate and error rate per app version). The continuous-experimentation document
+  describes the specific dashboard used to evaluate the new version.
+
+![Monitoring](docs/images/monitoring.png)
+For this image we need to check whether we are scraping metrics from only V1 or also v2
 
 ## Extra Information
 - Application configuration and credentials are provided via ConfigMaps and Secrets
+- This document focuses on the runtime deployment (Kubernetes + Istio + monitoring). Provisioning (Vagrant/Ansible) is only mentioned briefly where relevant.
