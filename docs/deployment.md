@@ -63,6 +63,7 @@ The system uses the following tools:
 - **Vagrant + Ansible**: Used to provision the local Kubernetes cluster.
 - **Prometheus + Grafana**: For continuous experimentation.
   
+![Architecture and Flow](docs/images/architecture&flow.png) 
 
 ## Deployment Structure
 
@@ -82,6 +83,8 @@ The system runs on a small Kubernetes cluster with one control-plane node and tw
 
 At a high level, the app and model pods run in the `default` namespace on the worker nodes, while the shared
 Istio infrastructure runs in `istio-system`.
+
+![Cluster](docs/images/cluster.png) 
 
 ### 2.2 Application workloads (Deployments & Services)
 
@@ -221,7 +224,7 @@ The diagrams in this document show how these components are connected and where 
 
 ## Monitoring
 
-TO DO
+![Monitoring](docs/images/monitoring.png) 
 
 ## Extra Information
 - Application configuration and credentials are provided via ConfigMaps and Secrets
