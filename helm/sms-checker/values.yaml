@@ -57,8 +57,6 @@ metricsIngress:
   className: nginx
   annotations: {}
 
-# webhook_url: "https://discord.com/api/webhooks/1458885152469024844/Co-BmjKEipe175yXZtnxFpJKBk5OgIXB_DdS3FNA_jnbYMYZkVc-dMpOLSZhhWEu_SjG/slack"
-
 # Prometheus Operator (kube-prometheus-stack) configuration overrides
 myprom:
   alertmanager:
