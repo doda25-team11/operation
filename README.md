@@ -50,7 +50,7 @@ To understand the architecture and deployment of the SMS Checker application, he
 
 ***
 
-### Operation (Current Repository)
+# Operation (Current Repository)
 
 These files define deployment and environment settings:
 
@@ -191,7 +191,7 @@ Some problems I encountered
 
 ***
 
-### Monitoring
+# Monitoring
 
 ## Usability metrics (Prometheus)
 
@@ -215,7 +215,22 @@ Use it as a proxy for **live engagement** and to detect drop-offs after changes/
 
 To access the streams, refer to the http://sms.local/metrics.
 
-### App 
+## Alertmanager (Prometheus)
+For the alertmanager, we use discord as the channel. Hereby, we make use of discord URL webhooks. 
+
+### Create a discord webhook for your own server
+To create a discord webhook for your own server, follow this guide: https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks.
+
+### Set up a predefined discord webhook URL Secret
+```bash
+kubectl create secret generic alertmanager-discord-webhook -n default   --from-literal=webhook_url="<DISCORD_WEBHOOK_URL>/slack"
+```
+Then finish setting it up by running (if necessary):
+```bash
+helm upgrade --install test-release . -f values.yaml
+```
+You should see notifications in your discord channel.
+# App 
 
 This component defines the Java application and its build process:
 
@@ -226,7 +241,7 @@ This component defines the Java application and its build process:
 
 ***
 
-### Model Service 
+# Model Service 
 
 This component manages the ML model and prediction API:
 
