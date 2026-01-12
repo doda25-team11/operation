@@ -129,6 +129,10 @@ I worked on checking the rubrics and improving assignment 2.
 - Figen: https://github.com/doda25-team11/lib-version/pull/2
 I worked on checking the rubriks and improving assignment 1, here in particular I improved some hard-coding and overwriting, such that it  keeps a "single source of truth"
 ### Week Q1.8 (Jan 12+)
+
+- Rodrigo: https://github.com/doda25-team11/operation/pull/25
+Continued working on the deployment documentation file.
+
 ### Week Q1.9 (Jan 19+)
 
 
