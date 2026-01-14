@@ -221,12 +221,7 @@ To access the Grafana dashboards, make sure you ran
 helm upgrade test-release .
 ```
 
-Then port-forward the svc using
-```bash
-kubectl port-forward svc/test-release-grafana 3000:80
-```
-
-Now you can see the Grafana dashboards in localhost:3000. 
+Now you can see the Grafana dashboards in sms.local/grafana. 
 
 You can use 'admin' as username, and the outcome of
 

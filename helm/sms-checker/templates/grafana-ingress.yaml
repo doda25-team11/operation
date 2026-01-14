@@ -1,0 +1,24 @@
+{{- if .Values.grafanaIngress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "sms-checker.fullname" . }}-grafana
+  {{- with .Values.grafanaIngress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.grafanaIngress.className | quote }}
+  rules:
+    - host: {{ .Values.grafanaIngress.host | quote }}
+      http:
+        paths:
+          - path: /grafana
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ default "grafana" .Values.myprom.grafana.serviceName | quote }}
+                port:
+                  number: {{ default 3000 .Values.myprom.grafana.servicePort }}
+{{- end }}
+

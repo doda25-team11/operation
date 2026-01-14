@@ -21,6 +21,15 @@ spec:
         - destination:
             host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
             subset: v1
+    
+    - match:
+        - uri:
+            prefix: "/grafana"
+      route:
+        - destination:
+            host: {{ .Release.Name }}-grafana.{{ .Release.Namespace }}.svc.cluster.local
+            port:
+              number: 80
 
     # 2) Sticky: force CANARY (v2) for users with header x-doda-exp: canary
     - match:
