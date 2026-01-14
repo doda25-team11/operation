@@ -1,7 +1,6 @@
 # SMS Checker – Deployment Documentation
 
 Stuff left to do in this file:
-- Images -> I think there should be an image for each section: 2, 3, and 4
 - Full readthrough that checks everything is correct, especially ports/links/commands/names/etc
 - Some sections have not been fully done yet
 - If you want to edit the images this is the link: https://drive.google.com/file/d/19sDs0Tn1onYtKaKgtMy1HRXwKfIKbewS/view?usp=sharing
@@ -63,6 +62,23 @@ The system uses the following tools:
 - **GitHub Container Registry (GHCR)**: Private container registry where app and model-service images are stored.
 - **Vagrant + Ansible**: Used to provision the local Kubernetes cluster.
 - **Prometheus + Grafana**: For continuous experimentation.
+
+### Access endpoints
+
+The main user- and system-facing entrypoints are summarised below.
+
+| Purpose                        | Host                                                     | Path      | Method | Port (inside cluster)      | Required headers                                  |
+|--------------------------------|----------------------------------------------------------|-----------|--------|----------------------------|---------------------------------------------------|
+| Landing page / basic health    | `sms.local`                                              | `/`       | GET    | 80 (Istio IngressGateway)  | `Host: sms.local`                                 |
+| Classify SMS via app-service   | `sms.local`                                              | `/sms`    | POST   | 80 (Istio IngressGateway)  | `Host: sms.local`, optional `x-doda-exp=…`        |
+| App → model prediction request | `test-release-sms-checker-model.default.svc.cluster.local` | `/predict` | POST | 80 (ClusterIP Service)     | –                                                 |
+| Prometheus scrape of app metrics | `test-release-sms-checker-app.default.svc.cluster.local` | *metrics endpoint* (e.g. `/metrics`) | GET | 80 (ClusterIP Service)  | –                                                 |
+
+> When accessing the application from the host machine, we either call  
+> `http://<INGRESS-EXTERNAL-IP>/…` or use  
+> `kubectl port-forward -n istio-system svc/istio-ingressgateway 8080:80` and call  
+> `http://localhost:8080/…` while still sending the header `Host: sms.local`.
+
   
 ![Architecture and Flow](docs/images/architecture&flow.png) 
 

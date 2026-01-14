@@ -131,7 +131,7 @@ I worked on checking the rubriks and improving assignment 1, here in particular 
 ### Week Q1.8 (Jan 12+)
 
 - Rodrigo: https://github.com/doda25-team11/operation/pull/25
-Continued working on the deployment documentation file + created the images for it.
+Continued working on the deployment documentation file + created the images for it. Worked on the presentation
 
 ### Week Q1.9 (Jan 19+)
 
