@@ -88,7 +88,7 @@ other fixes possible like pinging the worker node but I decided to not implement
 
 Still working on testing and merging A2's steps 20-21, made PR for A2's steps 22-23 and starting to work on A3
 
-- Rodrigo: https://github.com/doda25-team11/operation/pull/15, https://github.com/doda25-team11/operation/pull/11
+- Rodrigo: https://github.com/doda25-team11/operation/pull/11
 Worked on the traffic management + canary release of A4. Reviewed and collaborated on steps 20-23 of A2 since it needed fixing.
 
 - Arnas: https://github.com/doda25-team11/app/pull/4
@@ -112,7 +112,24 @@ I added the shadow launch as an additional use case and reviewed https://github.
 
 - Arnas: https://github.com/doda25-team11/operation/tree/rate-limiter
 I was working on additional use case, that is traffic limiter as well as reviewing peers.
+
+- Rodrigo: https://github.com/doda25-team11/operation/pull/15
+Analysed all the feedback + reviewed features left for reaching highest points in rubric. Worked on making a troubleshooting md. Merged the traffic management content.
+
+- Amy: https://github.com/doda25-team11/operation/pull/20
+I worked on setting up the Grafana dashboards.
+
 ### Week Q1.7 (Jan 5+)
+- Bill: https://github.com/doda25-team11/operation/pull/23
+
+- Rodrigo: https://github.com/doda25-team11/operation/pull/22
+Worked on the deployment documentation markdown file + started thinking/planning on the presentation.
+
+- Amy: https://github.com/doda25-team11/operation/pull/24
+I worked on checking the rubrics and improving assignment 2.
+
+- Figen: https://github.com/doda25-team11/lib-version/pull/2
+I worked on checking the rubriks and improving assignment 1, here in particular I improved some hard-coding and overwriting, such that it  keeps a "single source of truth"
 ### Week Q1.8 (Jan 12+)
 ### Week Q1.9 (Jan 19+)
 
