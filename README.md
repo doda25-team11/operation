@@ -215,6 +215,23 @@ Use it as a proxy for **live engagement** and to detect drop-offs after changes/
 
 To access the streams, refer to the http://sms.local/metrics.
 
+### Access Grafana
+To access the Grafana dashboards, make sure you ran
+```bash
+helm upgrade test-release .
+```
+
+Now you can see the Grafana dashboards in sms.local/grafana. 
+
+You can use 'admin' as username, and the outcome of
+
+```bash
+kubectl get secret test-release-grafana   -o jsonpath="{.data.admin-password}" | base64 --decode
+```
+
+as password.
+
+### App 
 ## Alertmanager (Prometheus)
 For the alertmanager, we use discord as the channel. Hereby, we make use of discord URL webhooks. 
 
