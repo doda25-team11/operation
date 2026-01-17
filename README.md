@@ -50,7 +50,7 @@ To understand the architecture and deployment of the SMS Checker application, he
 
 ***
 
-### Operation (Current Repository)
+# Operation (Current Repository)
 
 These files define deployment and environment settings:
 
@@ -102,13 +102,17 @@ vagrant destroy -f
 
 ### Helm Installation
 
-**Note:** Before running the Helm commands, make sure your Kubernetes cluster is reachable with `kubectl`. For example:
+**Note:** Before running the Helm commands, make sure your Kubernetes cluster is reachable with `kubectl` (from host). For example:
 ```bash
 kubectl config current-context
 kubectl get nodes
 ```
 This should list a context (e.g `minikube`) and at least one node (e.g. `minikube` or `ctrl`).
 
+If this returns a `current-context is not set` error, then add the `admin.conf` (located at `/provisioning-vm/.vagrant/`) as `KUBECONFIG` variable in the host
+```bash
+export KUBECONFIG=/<Path to repo>/operation/provisioning-vm/.vagrant/admin.conf
+```
 
 Install Helm 3 (follow the official docs for your OS).
 Ex:
@@ -121,7 +125,6 @@ Make sure you are in …/helm/sms-checker
 cd helm/sms-checker
 ```
 
-
 Check the chart
 ```bash
 helm lint .
@@ -132,14 +135,6 @@ Install / upgrade the release after changes
 ```bash
 helm install test-release .
 helm upgrade test-release .
-```
-To create a secret to be able to pull the latest images from the github repository 
-This does not store your info in any public place
-```bash
-kubectl create secret docker-registry ghcr-credentials \
-  --docker-server=ghcr.io \
-  --docker-username=YOUR_GITHUB_USERNAME \
-  --docker-password='YOUR_GHCR_PAT'
 ```
 
 To run with ingress (or set the variable to true in values.yaml)
@@ -196,7 +191,7 @@ Some problems I encountered
 
 ***
 
-### Monitoring
+# Monitoring
 
 ## Usability metrics (Prometheus)
 
@@ -218,10 +213,41 @@ Use it to detect spikes in simultaneous usage and correlate load with latency (p
 Approximate number of active user sessions (or active usage windows) at the moment.  
 Use it as a proxy for **live engagement** and to detect drop-offs after changes/releases.  
 
+To access the streams, refer to the http://sms.local/metrics.
 
-To access the streams, refer to the http://localhost:8080/actuator/prometheus.
+### Access Grafana
+To access the Grafana dashboards, make sure you ran
+```bash
+helm upgrade test-release .
+```
+
+Now you can see the Grafana dashboards in sms.local/grafana. 
+
+You can use 'admin' as username, and the outcome of
+
+```bash
+kubectl get secret test-release-grafana   -o jsonpath="{.data.admin-password}" | base64 --decode
+```
+
+as password.
 
 ### App 
+## Alertmanager (Prometheus)
+For the alertmanager, we use discord as the channel. Hereby, we make use of discord URL webhooks. 
+
+### Create a discord webhook for your own server
+To create a discord webhook for your own server, follow this guide: https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks.
+
+### Set up a predefined discord webhook URL Secret
+```bash
+kubectl create secret generic alertmanager-discord-webhook -n default   --from-literal=webhook_url="<DISCORD_WEBHOOK_URL>/slack"
+```
+Then finish setting it up by running (if necessary):
+```bash
+helm upgrade --install test-release . -f values.yaml
+```
+You should see notifications in your discord channel.
+# App 
 
 This component defines the Java application and its build process:
 
@@ -232,7 +258,7 @@ This component defines the Java application and its build process:
 
 ***
 
-### Model Service 
+# Model Service 
 
 This component manages the ML model and prediction API:
 

@@ -47,6 +47,12 @@ spec:
               value: "http://{{ $modelServiceName }}:{{ .Values.modelService.servicePort }}"
             - name: APP_VERSION
               value: "v2"
+            - name: MANAGEMENT_ENDPOINTS_WEB_BASE_PATH
+              value: "/"
+            - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+              value: "health,info,prometheus"
+            - name: MANAGEMENT_ENDPOINTS_WEB_PATHMAPPING_PROMETHEUS
+              value: "metrics"
           envFrom:
             - configMapRef:
                 name: {{ include "sms-checker.fullname" . }}-app-config

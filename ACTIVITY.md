@@ -80,12 +80,15 @@ I did not make any PR's. I spent my time on making the in-class exercises and st
 I have worked on steps 18 and 19 of A2. I have assigned myself step 3 of A3. I also fixed some bugs. I have helped wih 16 and 17 of A2.
 
 ### Week Q1.5 (Dec 8+)
+- Bill: https://github.com/doda25-team11/operation/pull/13 
+I helped Figen with checking and fixing the worker nodes not joining the cluster and we decided together that the fix is to use another IP. There were
+other fixes possible like pinging the worker node but I decided to not implement this solution and we decided to go with Figen's commit in the PR.
 
 - Radu: https://github.com/doda25-team11/operation/pull/11, https://github.com/doda25-team11/operation/pull/12
 
 Still working on testing and merging A2's steps 20-21, made PR for A2's steps 22-23 and starting to work on A3
 
-- Rodrigo: https://github.com/doda25-team11/operation/pull/15, https://github.com/doda25-team11/operation/pull/11
+- Rodrigo: https://github.com/doda25-team11/operation/pull/11
 Worked on the traffic management + canary release of A4. Reviewed and collaborated on steps 20-23 of A2 since it needed fixing.
 
 - Arnas: https://github.com/doda25-team11/app/pull/4
@@ -95,10 +98,38 @@ I made the monitoring metrics for A3 Prometheus. I used Figen's code for inspira
 - Figen:
 I worked on fixing the problems we had with A2 for the people using Oracle Virtualbox: https://github.com/doda25-team11/operation/pull/13
 I added prometheus as a dependency: https://github.com/doda25-team11/operation/pull/14
-I created the base for Arnas's code in App: https://github.com/doda25-team11/app/tree/A3.3-Metrics 
+I created the base for Arnas's code in App: https://github.com/doda25-team11/app/tree/A3.3-Metrics
+
+- Amy
+I worked on trying to fix the problem of joining the Kubernetes clusters in A2 (in https://github.com/doda25-team11/operation/pull/13). Not all team members had this issue as the bug was only there for VirtualBox users. I reviewed https://github.com/doda25-team11/operation/pull/15 and started with A4 - Continuous experimentation (https://github.com/doda25-team11/operation/pull/16).
 
 ### Week Q1.6 (Dec 15+)
+- Bill: https://github.com/doda25-team11/operation/pull/17 & https://github.com/doda25-team11/operation/pull/18
+I updated readme to make it more clear for the next feedback round. I also added a service monitor for prometheus and make the metrics endpoint at /metrics.
+
+- Figen: https://github.com/doda25-team11/operation/pull/19
+I added the shadow launch as an additional use case and reviewed https://github.com/doda25-team11/operation/pull/18.
+
+- Arnas: https://github.com/doda25-team11/operation/tree/rate-limiter
+I was working on additional use case, that is traffic limiter as well as reviewing peers.
+
+- Rodrigo: https://github.com/doda25-team11/operation/pull/15
+Analysed all the feedback + reviewed features left for reaching highest points in rubric. Worked on making a troubleshooting md. Merged the traffic management content.
+
+- Amy: https://github.com/doda25-team11/operation/pull/20
+I worked on setting up the Grafana dashboards.
+
 ### Week Q1.7 (Jan 5+)
+- Bill: https://github.com/doda25-team11/operation/pull/23
+
+- Rodrigo: https://github.com/doda25-team11/operation/pull/22
+Worked on the deployment documentation markdown file + started thinking/planning on the presentation.
+
+- Amy: https://github.com/doda25-team11/operation/pull/24
+I worked on checking the rubrics and improving assignment 2.
+
+- Figen: https://github.com/doda25-team11/lib-version/pull/2
+I worked on checking the rubriks and improving assignment 1, here in particular I improved some hard-coding and overwriting, such that it  keeps a "single source of truth"
 ### Week Q1.8 (Jan 12+)
 ### Week Q1.9 (Jan 19+)
 

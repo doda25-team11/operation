@@ -13,7 +13,25 @@ spec:
   gateways:
     - {{ include "sms-checker.fullname" . }}-gateway
   http:
-    # 1) Sticky: force CANARY (v2) for users with header x-doda-exp: canary
+    # 1) Expose metrics on /metrics (dev convenience); app now serves /metrics directly
+    - match:
+        - uri:
+            prefix: "/metrics"
+      route:
+        - destination:
+            host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
+            subset: v1
+    
+    - match:
+        - uri:
+            prefix: "/grafana"
+      route:
+        - destination:
+            host: {{ .Release.Name }}-grafana.{{ .Release.Namespace }}.svc.cluster.local
+            port:
+              number: 80
+
+    # 2) Sticky: force CANARY (v2) for users with header x-doda-exp: canary
     - match:
         - headers:
             {{ .Values.istio.stickyHeader }}:
@@ -24,7 +42,7 @@ spec:
             subset: v2
           weight: 100
 
-    # 2) Sticky: force STABLE (v1) for users with header x-doda-exp: control
+    # 3) Sticky: force STABLE (v1) for users with header x-doda-exp: control
     - match:
         - headers:
             {{ .Values.istio.stickyHeader }}:
@@ -35,7 +53,7 @@ spec:
             subset: v1
           weight: 100
 
-    # 3) Default: 90/10 split for users without sticky header
+    # 4) Default: 90/10 split for users without sticky header
     - route:
         - destination:
             host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
