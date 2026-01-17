@@ -1,0 +1,30 @@
+{{- if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "sms-checker.fullname" . }}-alerts
+  labels:
+    app.kubernetes.io/name: {{ include "sms-checker.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "app"
+    release: {{ .Release.Name }}
+spec:
+  groups:
+    - name: sms-checker-traffic
+      rules:
+        - alert: HighRequestRate
+          expr: |
+            sum(
+              rate(
+                http_server_requests_seconds_count{
+                  namespace="{{ .Release.Namespace }}"
+                }[1m]
+              )
+            ) * 60 > 15
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "sms-checker request volume is high"
+            description: "More than 15 requests per minute for 2 minutes. Current rate: {{"{{"}} $value | printf \"%.2f\" {{"}}"}} req/min."
+{{- end }}
