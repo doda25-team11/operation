@@ -1,9 +1,5 @@
 # SMS Checker – Deployment Documentation
 
-Stuff left to do in this file:
-- Full readthrough that checks everything is correct, especially ports/links/commands/names/etc
-- Some sections have not been fully done yet
-- If you want to edit the images this is the link: https://drive.google.com/file/d/19sDs0Tn1onYtKaKgtMy1HRXwKfIKbewS/view?usp=sharing
 
 ## Table of Contents
 - [Overview](#overview)
@@ -73,11 +69,6 @@ The main user- and system-facing entrypoints are summarised below.
 | Classify SMS via app-service   | `sms.local`                                              | `/sms`    | POST   | 80 (Istio IngressGateway)  | `Host: sms.local`, optional `x-doda-exp=…`        |
 | App → model prediction request | `test-release-sms-checker-model.default.svc.cluster.local` | `/predict` | POST | 80 (ClusterIP Service)     | –                                                 |
 | Prometheus scrape of app metrics | `test-release-sms-checker-app.default.svc.cluster.local` | *metrics endpoint* (e.g. `/metrics`) | GET | 80 (ClusterIP Service)  | –                                                 |
-
-> When accessing the application from the host machine, we either call  
-> `http://<INGRESS-EXTERNAL-IP>/…` or use  
-> `kubectl port-forward -n istio-system svc/istio-ingressgateway 8080:80` and call  
-> `http://localhost:8080/…` while still sending the header `Host: sms.local`.
 
   
 ![Architecture and Flow](docs/images/architecture&flow.png) 
@@ -160,12 +151,12 @@ Istio adds a service-mesh layer on top of the Kubernetes deployment. Structurall
   - Envoy sidecars injected into each app and model pod (`app-v1`, `app-v2`, `model-v1`, `model-v2`), so that inbound
     and outbound HTTP traffic is processed according to Istio’s routing rules.
   - Istio configuration resources specific to this application:
-    - a **Gateway** (`test-release-sms-checker-gateway`) that binds host `sms.local` on port 80 to the IngressGateway,
-    - a **VirtualService** for the app (`test-release-sms-checker-app-vs`) that routes external traffic to the app
+    - a **Gateway** that binds host `sms.local` on port 80 to the IngressGateway,
+    - a **VirtualService** for the app that routes external traffic to the app
       Service and its v1/v2 subsets,
-    - a **VirtualService** for the model (`test-release-sms-checker-model-vs`) that routes app → model calls to
+    - a **VirtualService** for the model that routes app → model calls to
       model v1/v2 subsets,
-    - two **DestinationRules** (`…-app-dr` and `…-model-dr`) that define the logical subsets `v1` and `v2` for the
+    - two **DestinationRules** that define the logical subsets `v1` and `v2` for the
       app and model Services based on the `version` label.
 
 The details of how these resources implement the 90/10 canary split and sticky sessions for “control” and “canary”
@@ -189,13 +180,13 @@ From a client’s perspective, every request goes to the same public entrypoint:
    - serves `GET /` for a basic landing/health response, or
    - handles `POST /sms` and calls the model-service to obtain a prediction.
 
-At this level, the important point is that **all external traffic** enters through the IngressGateway and is then
+All external traffic enters through the IngressGateway and is then
 handed off to the app Service via Istio’s routing rules.
 
 ### 3.2 Experiment routing and sticky sessions (v1 vs v2)
 
-The canary release and sticky sessions are implemented in the **app VirtualService**. Conceptually, it decides
-**which version of the app** should handle each incoming request:
+The canary release and sticky sessions are implemented in the app VirtualService. It decides
+which version of the app should handle each incoming request:
 
 - Requests with header `x-doda-exp: control` are always routed to the **stable version (v1)**.
 - Requests with header `x-doda-exp: canary` are always routed to the **canary version (v2)**.
@@ -203,7 +194,7 @@ The canary release and sticky sessions are implemented in the **app VirtualServi
   (e.g. around 90% to v1 and 10% to v2).
 
 These rules map to logical “subsets” of the app behind the Service, defined in the app **DestinationRule**. This is
-the main **dynamic routing decision point** for external traffic:
+the main dynamic routing decision point for external traffic:
 
 - It implements the global 90/10 canary split.
 - It provides sticky behaviour for “control” and “canary” users based on a dedicated header.
@@ -213,18 +204,10 @@ the main **dynamic routing decision point** for external traffic:
 When the app needs a prediction, it calls the model-service through its Kubernetes Service
 `test-release-sms-checker-model`. This internal call is also routed by Istio:
 
-1. The request from the app pod goes to the model Service and is intercepted by the **model VirtualService**
-   (`test-release-sms-checker-model-vs`).
+1. The request from the app pod goes to the model Service and is intercepted by the **model VirtualService**.
 2. The VirtualService uses information about the **calling app pod** (in particular its `version` label) and selects
-   the matching subset of the model, defined in the model **DestinationRule**.
-
-As a result:
-
-- app v1 calls **model v1**,
-- app v2 calls **model v2**,
-
-so that each user consistently sees either the old pair (app+model v1) or the new pair (app+model v2). This is the
-second **dynamic routing decision point**, ensuring consistency between the two services.
+   the matching subset of the model, defined in the model **DestinationRule**. So each user consistently sees either the
+   old pair (app+model v1) or the new pair (app+model v2).
 
 ### 3.4 Overview
 
@@ -244,17 +227,14 @@ The diagrams in this document show how these components are connected and where 
 The monitoring stack is deployed in the cluster alongside the SMS Checker and is used to support
 continuous experimentation.
 
-**TODO** Check this because I've made it up.
-
 - **Prometheus** periodically scrapes application metrics from the app pods (v1 and v2). These metrics
-  include HTTP request counts and latency, which are used to compare the behaviour of the stable and
-  canary versions during experiments.
+  include HTTP metrics such as latency, which are used to compare the behaviour of the stable and
+  canary versions during experiments as explained in the continuous experimentation document.
 - **Grafana** connects to Prometheus as a data source and provides dashboards that visualise these
-  metrics (e.g. request rate and error rate per app version). The continuous-experimentation document
-  describes the specific dashboard used to evaluate the new version.
+  metrics. The continuous-experimentation document describes the specific experiment used to evaluate the new version
+  and provides an example of a visualisation made.
 
 ![Monitoring](docs/images/monitoring.png)
-For this image we need to check whether we are scraping metrics from only V1 or also v2
 
 ## Extra Information
 - Application configuration and credentials are provided via ConfigMaps and Secrets
