@@ -134,7 +134,8 @@ I worked on checking the rubriks and improving assignment 1, here in particular 
 
 - Rodrigo: https://github.com/doda25-team11/operation/pull/25
 Continued working on the deployment documentation file + created the images for it. Worked on the presentation
-
+- Figen: https://github.com/doda25-team11/model-service/pull/8, https://github.com/doda25-team11/operation/pull/26
+COntinued working on looking for ways to make sure A1 is consistent with the rubrik
 ### Week Q1.9 (Jan 19+)
 
 
