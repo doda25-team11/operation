@@ -24,10 +24,6 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "app"
         version: v2
-      annotations:  
-        prometheus.io/scrape: "true"
-        prometheus.io/path: "/metrics"
-        prometheus.io/port: "8080"
     spec:
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
