@@ -141,7 +141,8 @@ COntinued working on looking for ways to make sure A1 is consistent with the rub
 I worked on the presentation and the continous experimentation of assignment 4.
 
 ### Week Q1.9 (Jan 19+)
-
+- Amy: https://github.com/doda25-team11/operation/pull/28
+I improved the traffic-management exercise (A4) by making sure we don't use hard-coded values.
 
 
 ### Example from Brightspace
