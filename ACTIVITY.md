@@ -137,6 +137,9 @@ Continued working on the deployment documentation file + created the images for 
 - Figen: https://github.com/doda25-team11/model-service/pull/8, https://github.com/doda25-team11/operation/pull/26
 COntinued working on looking for ways to make sure A1 is consistent with the rubrik
 - Arnas: added an ingress for Grafana https://github.com/doda25-team11/operation/commit/ae4bd640bbc310a2358a1eba4fec3db930fa7b80, where the dashboard can be accessed at endpoint /metrics. I checked the rubric for excelent in metrics.
+- Amy: https://github.com/doda25-team11/operation/pull/16
+I worked on the presentation and the continous experimentation of assignment 4.
+
 ### Week Q1.9 (Jan 19+)
 
 
