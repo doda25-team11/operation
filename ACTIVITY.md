@@ -131,7 +131,8 @@ I worked on checking the rubrics and improving assignment 2.
 - Figen: https://github.com/doda25-team11/lib-version/pull/2
 I worked on checking the rubriks and improving assignment 1, here in particular I improved some hard-coding and overwriting, such that it  keeps a "single source of truth"
 ### Week Q1.8 (Jan 12+)
-
+- Amy: https://github.com/doda25-team11/operation/pull/16
+I worked on the presentation and the continous experimentation of assignment 4.
 - Rodrigo: https://github.com/doda25-team11/operation/pull/25
 Continued working on the deployment documentation file + created the images for it. Worked on the presentation
 - Figen: https://github.com/doda25-team11/model-service/pull/8, https://github.com/doda25-team11/operation/pull/26
