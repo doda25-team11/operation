@@ -1,9 +1,9 @@
 # SMS Checker – Deployment Documentation
 
 Stuff left to do in this file:
-- Images -> I think there should be an image for each section: 2, 3, and 4
 - Full readthrough that checks everything is correct, especially ports/links/commands/names/etc
 - Some sections have not been fully done yet
+- If you want to edit the images this is the link: https://drive.google.com/file/d/19sDs0Tn1onYtKaKgtMy1HRXwKfIKbewS/view?usp=sharing
 
 ## Table of Contents
 - [Overview](#overview)
@@ -62,7 +62,25 @@ The system uses the following tools:
 - **GitHub Container Registry (GHCR)**: Private container registry where app and model-service images are stored.
 - **Vagrant + Ansible**: Used to provision the local Kubernetes cluster.
 - **Prometheus + Grafana**: For continuous experimentation.
+
+### Access endpoints
+
+The main user- and system-facing entrypoints are summarised below.
+
+| Purpose                        | Host                                                     | Path      | Method | Port (inside cluster)      | Required headers                                  |
+|--------------------------------|----------------------------------------------------------|-----------|--------|----------------------------|---------------------------------------------------|
+| Landing page / basic health    | `sms.local`                                              | `/`       | GET    | 80 (Istio IngressGateway)  | `Host: sms.local`                                 |
+| Classify SMS via app-service   | `sms.local`                                              | `/sms`    | POST   | 80 (Istio IngressGateway)  | `Host: sms.local`, optional `x-doda-exp=…`        |
+| App → model prediction request | `test-release-sms-checker-model.default.svc.cluster.local` | `/predict` | POST | 80 (ClusterIP Service)     | –                                                 |
+| Prometheus scrape of app metrics | `test-release-sms-checker-app.default.svc.cluster.local` | *metrics endpoint* (e.g. `/metrics`) | GET | 80 (ClusterIP Service)  | –                                                 |
+
+> When accessing the application from the host machine, we either call  
+> `http://<INGRESS-EXTERNAL-IP>/…` or use  
+> `kubectl port-forward -n istio-system svc/istio-ingressgateway 8080:80` and call  
+> `http://localhost:8080/…` while still sending the header `Host: sms.local`.
+
   
+![Architecture and Flow](docs/images/architecture&flow.png) 
 
 ## Deployment Structure
 
@@ -82,6 +100,8 @@ The system runs on a small Kubernetes cluster with one control-plane node and tw
 
 At a high level, the app and model pods run in the `default` namespace on the worker nodes, while the shared
 Istio infrastructure runs in `istio-system`.
+
+![Cluster](docs/images/cluster.png) 
 
 ### 2.2 Application workloads (Deployments & Services)
 
@@ -149,14 +169,93 @@ Istio adds a service-mesh layer on top of the Kubernetes deployment. Structurall
       app and model Services based on the `version` label.
 
 The details of how these resources implement the 90/10 canary split and sticky sessions for “control” and “canary”
-users are described in the **Data Flow** section.
+users are described in the **Data Flow** section. In combination, the Gateway, VirtualServices and DestinationRules define 
+how external traffic for sms.local is admitted through the IngressGateway and then split between the v1/v2 subsets of 
+the app and model Services.
 
 ## Data Flow
 
 
+### 3.1 External request flow (client → app)
+
+From a client’s perspective, every request goes to the same public entrypoint:
+
+1. The client sends an HTTP request to the cluster via the **Istio IngressGateway** (host `sms.local`, port `80`).
+2. The **Gateway** (`test-release-sms-checker-gateway`) matches this traffic for `sms.local` and passes it to the
+   **app VirtualService** (`test-release-sms-checker-app-vs`).
+3. The VirtualService forwards the request to the Kubernetes Service
+   `test-release-sms-checker-app`, which then routes it to one of the app pods (v1 or v2).
+4. The selected app pod:
+   - serves `GET /` for a basic landing/health response, or
+   - handles `POST /sms` and calls the model-service to obtain a prediction.
+
+At this level, the important point is that **all external traffic** enters through the IngressGateway and is then
+handed off to the app Service via Istio’s routing rules.
+
+### 3.2 Experiment routing and sticky sessions (v1 vs v2)
+
+The canary release and sticky sessions are implemented in the **app VirtualService**. Conceptually, it decides
+**which version of the app** should handle each incoming request:
+
+- Requests with header `x-doda-exp: control` are always routed to the **stable version (v1)**.
+- Requests with header `x-doda-exp: canary` are always routed to the **canary version (v2)**.
+- Requests **without** this header are split between v1 and v2 using a **weighted canary rollout**
+  (e.g. around 90% to v1 and 10% to v2).
+
+These rules map to logical “subsets” of the app behind the Service, defined in the app **DestinationRule**. This is
+the main **dynamic routing decision point** for external traffic:
+
+- It implements the global 90/10 canary split.
+- It provides sticky behaviour for “control” and “canary” users based on a dedicated header.
+
+### 3.3 App → model flow and consistent pairing
+
+When the app needs a prediction, it calls the model-service through its Kubernetes Service
+`test-release-sms-checker-model`. This internal call is also routed by Istio:
+
+1. The request from the app pod goes to the model Service and is intercepted by the **model VirtualService**
+   (`test-release-sms-checker-model-vs`).
+2. The VirtualService uses information about the **calling app pod** (in particular its `version` label) and selects
+   the matching subset of the model, defined in the model **DestinationRule**.
+
+As a result:
+
+- app v1 calls **model v1**,
+- app v2 calls **model v2**,
+
+so that each user consistently sees either the old pair (app+model v1) or the new pair (app+model v2). This is the
+second **dynamic routing decision point**, ensuring consistency between the two services.
+
+### 3.4 Overview
+
+Putting it together, a typical request flows as:
+
+> client → IngressGateway → Gateway → app VirtualService → app Service → app pod (v1 or v2)  
+> → model VirtualService → model Service → model pod (v1 or v2) → back to client
+
+The diagrams in this document show how these components are connected and where the two routing decisions
+(90/10 split and app/model pairing) are applied.
+
+
+
+
 ## Monitoring
 
-TO DO
+The monitoring stack is deployed in the cluster alongside the SMS Checker and is used to support
+continuous experimentation.
+
+**TODO** Check this because I've made it up.
+
+- **Prometheus** periodically scrapes application metrics from the app pods (v1 and v2). These metrics
+  include HTTP request counts and latency, which are used to compare the behaviour of the stable and
+  canary versions during experiments.
+- **Grafana** connects to Prometheus as a data source and provides dashboards that visualise these
+  metrics (e.g. request rate and error rate per app version). The continuous-experimentation document
+  describes the specific dashboard used to evaluate the new version.
+
+![Monitoring](docs/images/monitoring.png)
+For this image we need to check whether we are scraping metrics from only V1 or also v2
 
 ## Extra Information
 - Application configuration and credentials are provided via ConfigMaps and Secrets
+- This document focuses on the runtime deployment (Kubernetes + Istio + monitoring). Provisioning (Vagrant/Ansible) is only mentioned briefly where relevant.
