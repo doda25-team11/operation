@@ -35,7 +35,7 @@ spec:
         - name: app
           # STABLE image tag
           image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tagStable }}"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: MODEL_SERVICE_URL
               value: "http://{{ $modelServiceName }}:{{ .Values.modelService.servicePort }}"
