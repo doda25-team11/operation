@@ -36,6 +36,13 @@ istio:
   ingressGateway:
     selectorLabels:
       istio: ingressgateway
+  stickyWeights:
+    stable: 100 
+    canary: 100
+  subsets:
+    stable: v1
+    canary: v2
+
 
   # Hostname that users will use for the app (configure /etc/hosts to point it to the IngressGateway IP)
   hosts:
