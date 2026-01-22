@@ -1,4 +1,6 @@
 {{- if .Values.istio.enabled }}
+{{- $modelHost := printf "%s-model.%s.svc.cluster.local" (include "sms-checker.fullname" .) .Release.Namespace }}
+{{- $mirroring := .Values.istio.mirroring }}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -9,23 +11,18 @@ metadata:
     app.kubernetes.io/component: "istio"
 spec:
   hosts:
-    - {{ include "sms-checker.fullname" . }}-model.{{ .Release.Namespace }}.svc.cluster.local
+    - {{ $modelHost }}
   http:
-    - match:
-        - sourceLabels:
-            app.kubernetes.io/name: "{{ include "sms-checker.fullname" . }}-app"
-            version: v1
-      route:
+    - route:
         - destination:
-            host: {{ include "sms-checker.fullname" . }}-model.{{ .Release.Namespace }}.svc.cluster.local
+            host: {{ $modelHost }}
             subset: v1
-
-    - match:
-        - sourceLabels:
-            app.kubernetes.io/name: "{{ include "sms-checker.fullname" . }}-app"
-            version: v2
-      route:
-        - destination:
-            host: {{ include "sms-checker.fullname" . }}-model.{{ .Release.Namespace }}.svc.cluster.local
-            subset: v2
+          weight: 100
+      {{- if and $mirroring $mirroring.enabled }}
+      mirror:
+        host: {{ $modelHost }}
+        subset: v2
+      mirrorPercentage:
+        value: {{ default 100.0 $mirroring.percentage }}
+      {{- end }}
 {{- end }}

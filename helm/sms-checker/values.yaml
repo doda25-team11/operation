@@ -48,6 +48,11 @@ istio:
   # Sticky session header – used to force users into v1 or v2
   stickyHeader: x-doda-exp
 
+  # Shadow launch (traffic mirroring) for the model service
+  mirroring:
+    enabled: true
+    percentage: 100.0
+
 # Prometheus metrics ingress
 metricsIngress:
   enabled: true
