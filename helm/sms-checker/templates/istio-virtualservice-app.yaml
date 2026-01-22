@@ -20,7 +20,7 @@ spec:
       route:
         - destination:
             host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
-            subset: v1
+            subset: {{ .Values.istio.subsets.stable }}
     
     - match:
         - uri:
@@ -39,8 +39,8 @@ spec:
       route:
         - destination:
             host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
-            subset: v2
-          weight: 100
+            subset: {{ .Values.istio.subsets.canary }}
+          weight: {{ .Values.istio.stickyWeights.canary }}
 
     # 3) Sticky: force STABLE (v1) for users with header x-doda-exp: control
     - match:
@@ -50,17 +50,17 @@ spec:
       route:
         - destination:
             host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
-            subset: v1
-          weight: 100
+            subset: {{ .Values.istio.subsets.stable }}
+          weight: {{ .Values.istio.stickyWeights.stable }}
 
     # 4) Default: 90/10 split for users without sticky header
     - route:
         - destination:
             host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
-            subset: v1
+            subset: {{ .Values.istio.subsets.stable }}
           weight: {{ .Values.istio.trafficSplit.stableWeight }}
         - destination:
             host: {{ include "sms-checker.fullname" . }}-app.{{ .Release.Namespace }}.svc.cluster.local
-            subset: v2
+            subset: {{ .Values.istio.subsets.canary }}
           weight: {{ .Values.istio.trafficSplit.canaryWeight }}
 {{- end }}
