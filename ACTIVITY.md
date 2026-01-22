@@ -144,6 +144,8 @@ COntinued working on looking for ways to make sure A1 is consistent with the rub
 I improved the traffic-management exercise (A4) by making sure we don't use hard-coded values.
 - Bill: https://github.com/doda25-team11/operation/pull/27 
 Added extension proposal.
+- Rodrigo: https://github.com/doda25-team11/operation/pull/29
+Reviewed #27, #28. Cleaned up files in helm, finished documentation
 
 ### Example from Brightspace
 - Alice: https://github.com/doda25-team1/lib-version/pull/1
