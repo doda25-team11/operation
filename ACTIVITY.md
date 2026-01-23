@@ -146,6 +146,7 @@ I improved the traffic-management exercise (A4) by making sure we don't use hard
 Added extension proposal.
 - Rodrigo: https://github.com/doda25-team11/operation/pull/29
 Reviewed #27, #28. Cleaned up files in helm, finished documentation
+- Arnas #31. Improved Grafana, added shared folder for VMs.
 
 ### Example from Brightspace
 - Alice: https://github.com/doda25-team1/lib-version/pull/1
