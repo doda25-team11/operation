@@ -59,3 +59,13 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          volumeMounts:
+            - name: shared-folder
+              mountPath: /mnt/shared
+              readOnly: false
+      volumes:
+        - name: shared-folder
+          hostPath:
+            path: /mnt/shared
+            type: DirectoryOrCreate
+
