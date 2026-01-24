@@ -15,7 +15,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "bento/ubuntu-24.04"
 
-  config.vm.synced_folder ".", "/mnt/shared"
+  config.vm.synced_folder ".", "/vagrant", type: "nfs", nfs_udp: false
+  config.vm.synced_folder ".", "/mnt/shared", type: "nfs", nfs_udp: false
   
   # general setup for ALL VMs
   # executes 'general.yml' on all nodes before node-specific provisioning
