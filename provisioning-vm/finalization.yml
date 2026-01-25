@@ -173,3 +173,9 @@
         executable: /bin/bash
       environment:
         KUBECONFIG: "{{ kubeconfig_path }}"
+
+    - name: Enable Istio sidecar injection for default namespace
+      ansible.builtin.command:
+        cmd: kubectl label namespace default istio-injection=enabled --overwrite
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
