@@ -63,6 +63,8 @@ These files define deployment and environment settings:
 
 All provisioning lives in `provisioning-vm/` and is handled by Vagrant + Ansible.
 
+**Notes:** run Vagrant commands with --parallel flag for faster performance, also make sure that the host has nfsd installed.
+
 ```bash
 cd provisioning-vm
 ```
@@ -70,6 +72,10 @@ cd provisioning-vm
 Start the cluster (default provider, usually VirtualBox):
 ```bash
 vagrant up
+```
+For measuring provisioning time:
+```bash
+ANSIBLE_CALLBACKS_ENABLED=profile_tasks vagrant up --parallel
 ```
 Start the cluster with a different provider (e.g. VMware):
 ```bash
