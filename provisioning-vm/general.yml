@@ -2,9 +2,7 @@
   become: true
 
   vars:
-    ssh_public_key_files: # file path relative to this playbook
-      - "ssh_keys/rodrigo.pub"
-      # Add more keys, we need at least 2 (2 team members)
+    ssh_public_key_files: "{{ lookup('fileglob', playbook_dir + '/ssh_keys/*.pub', wantlist=True) }}"
 
     # STEP 7: sysctl parameters required by Kubernetes
     k8s_sysctl_settings:
