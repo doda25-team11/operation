@@ -55,6 +55,11 @@ istio:
   # Sticky session header – used to force users into v1 or v2
   stickyHeader: x-doda-exp
 
+  # Shadow launch (traffic mirroring) for the model service
+  mirroring:
+    enabled: true
+    percentage: 100.0
+
 # Prometheus metrics ingress
 metricsIngress:
   enabled: true
@@ -64,6 +69,28 @@ metricsIngress:
 
 # Prometheus Operator (kube-prometheus-stack) configuration overrides
 myprom:
+  # Exclude admission webhook jobs from sidecar injection
+  prometheusOperator:
+    admissionWebhooks:
+      patch:
+        podAnnotations:
+          sidecar.istio.io/inject: "false"
+  
+  # Exclude monitoring components
+  kube-state-metrics:
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+  
+  prometheus-node-exporter:
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+  
+  prometheus:
+    prometheusSpec:
+      podMetadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+
   alertmanager:
     alertmanagerSpec:
       secrets:
