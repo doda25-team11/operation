@@ -150,6 +150,10 @@ Reviewed #27, #28. Cleaned up files in helm, finished documentation
 - Figen: https://github.com/doda25-team11/operation/pull/30
 Fixed the problems with shadow launch A4
 
+### Week Q1.10 (Jan 26+)
+- Bill: https://github.com/doda25-team11/operation/pull/33
+I noticed that there was only one ssh key. There should be two. A2 - step 4. I fixed the SSH key looping issue that it supports 2+ keys and improved the playbook in such a way that you don't need to hard code ssh keys.
+
 ### Example from Brightspace
 - Alice: https://github.com/doda25-team1/lib-version/pull/1
 I have worked on A1 and have contributed a versioning strategy for the library.
