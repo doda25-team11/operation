@@ -147,6 +147,8 @@ Added extension proposal.
 - Rodrigo: https://github.com/doda25-team11/operation/pull/29
 Reviewed #27, #28. Cleaned up files in helm, finished documentation
 - Arnas https://github.com/doda25-team11/operation/pull/31. Improved Grafana, added shared folder for VMs.
+- Figen: https://github.com/doda25-team11/operation/pull/30
+Fixed the problems with shadow launch A4
 
 ### Example from Brightspace
 - Alice: https://github.com/doda25-team1/lib-version/pull/1
