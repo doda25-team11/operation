@@ -44,12 +44,11 @@ spec:
             # Helpful for debugging / seeing which version answers
             - name: APP_VERSION
               value: "v1"
-            - name: MANAGEMENT_ENDPOINTS_WEB_BASE_PATH
-              value: "/"
             - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
-              value: "health,info,prometheus"
-            - name: MANAGEMENT_ENDPOINTS_WEB_PATHMAPPING_PROMETHEUS
-              value: "metrics"
+              value: "health,info"
+            - name: MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED
+              value: "false"
+
           envFrom:
             - configMapRef:
                 name: {{ include "sms-checker.fullname" . }}-app-config

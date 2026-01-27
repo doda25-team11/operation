@@ -4,10 +4,12 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "sms-checker.fullname" . }}-app
   labels:
+    prometheus: app
     app.kubernetes.io/name: {{ include "sms-checker.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/component: "app"
     release: {{ .Release.Name }}
+    Release: {{ .Release.Name }}
 spec:
   namespaceSelector:
     matchNames:
