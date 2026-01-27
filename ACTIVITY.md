@@ -121,6 +121,7 @@ I worked on setting up the Grafana dashboards.
 
 ### Week Q1.7 (Jan 5+)
 - Bill: https://github.com/doda25-team11/operation/pull/23
+Added alertmanager, which can trigger alerts with /metrics.
 
 - Rodrigo: https://github.com/doda25-team11/operation/pull/22
 Worked on the deployment documentation markdown file + started thinking/planning on the presentation.
