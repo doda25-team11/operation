@@ -154,6 +154,8 @@ Fixed the problems with shadow launch A4
 ### Week Q1.10 (Jan 26+)
 - Bill: https://github.com/doda25-team11/operation/pull/33
 I noticed that there was only one ssh key. There should be two. A2 - step 4. I fixed the SSH key looping issue that it supports 2+ keys and improved the playbook in such a way that you don't need to hard code ssh keys.
+- Arnas: https://github.com/doda25-team11/operation/pull/34, https://github.com/doda25-team11/app/pull/5
+I tried to change Prometheus to use custom its own instance instead of Istio, which the professor pointed out during the presentation, but encountered some issues with integration, which sadly I was unable to solve before the deadline.
 
 ### Example from Brightspace
 - Alice: https://github.com/doda25-team1/lib-version/pull/1
