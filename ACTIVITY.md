@@ -111,7 +111,7 @@ I updated readme to make it more clear for the next feedback round. I also added
 I added the shadow launch as an additional use case and reviewed https://github.com/doda25-team11/operation/pull/18.
 
 - Arnas: https://github.com/doda25-team11/operation/tree/rate-limiter
-I was working on additional use case, that is traffic limiter as well as reviewing peers.
+I was working on additional use case, that is traffic limiter as well as reviewing peers. UPDATE: Since there is already shadow launch present, this additional case was not merged.
 
 - Rodrigo: https://github.com/doda25-team11/operation/pull/15
 Analysed all the feedback + reviewed features left for reaching highest points in rubric. Worked on making a troubleshooting md. Merged the traffic management content.
